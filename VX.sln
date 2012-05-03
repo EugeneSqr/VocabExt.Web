@@ -2,9 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VX.Web", "VX.Web\VX.Web.csproj", "{8A2E9C70-308F-457E-92F2-AA6D3A83110E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{322B7A69-17E3-45F0-9D11-2BEB27B5BD72} = {322B7A69-17E3-45F0-9D11-2BEB27B5BD72}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
