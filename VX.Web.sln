@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VX.Web", "VX.Web\VX.Web.csproj", "{8A2E9C70-308F-457E-92F2-AA6D3A83110E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A2E9C70-308F-457E-92F2-AA6D3A83110E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2E9C70-308F-457E-92F2-AA6D3A83110E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2E9C70-308F-457E-92F2-AA6D3A83110E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2E9C70-308F-457E-92F2-AA6D3A83110E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322B7A69-17E3-45F0-9D11-2BEB27B5BD72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322B7A69-17E3-45F0-9D11-2BEB27B5BD72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322B7A69-17E3-45F0-9D11-2BEB27B5BD72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322B7A69-17E3-45F0-9D11-2BEB27B5BD72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7E6BB4C-19E1-40E8-88F9-597754311E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7E6BB4C-19E1-40E8-88F9-597754311E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7E6BB4C-19E1-40E8-88F9-597754311E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7E6BB4C-19E1-40E8-88F9-597754311E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6DC34C1-E650-4757-8A92-0DDBA3D1E88A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6DC34C1-E650-4757-8A92-0DDBA3D1E88A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6DC34C1-E650-4757-8A92-0DDBA3D1E88A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6DC34C1-E650-4757-8A92-0DDBA3D1E88A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
