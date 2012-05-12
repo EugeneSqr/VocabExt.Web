@@ -11,7 +11,7 @@ namespace VX.Web.Controllers
             /*ViewData["Message"] = service.GetData(1);*/
             /*ViewData["Message"] = service.GetLanguage().Name;*/
             /*ViewData["Message"] = service.GetTask().Question.Spelling;*/
-
+            /*Profile.GetCurrent(HttpContext.Profile).ActiveVocabularyBanks = new List<int> { 3, 4 };*/
             return View();
         }
 

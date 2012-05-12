@@ -77,7 +77,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="IProfileService.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Profile.cs" />
+    <Compile Include="ProfileService.svc.cs">
+      <DependentUpon>ProfileService.svc</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +102,7 @@
     <Content Include="Content\Images\quote.gif" />
     <Content Include="Content\Images\square-green.png" />
     <Content Include="Global.asax" />
+    <Content Include="ProfileService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
