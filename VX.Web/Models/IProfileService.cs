@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace VX.Web
+namespace VX.Web.Models
 {
     [ServiceContract]
     public interface IProfileService

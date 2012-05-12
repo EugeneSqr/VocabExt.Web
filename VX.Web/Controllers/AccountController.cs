@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using VX.Web.AccountMembershipServiceReference;
 using VX.Web.Models;
 
 namespace VX.Web.Controllers
@@ -15,14 +11,14 @@ namespace VX.Web.Controllers
     [HandleError]
     public class AccountController : Controller
     {
-
         public IFormsAuthenticationService FormsService { get; set; }
-        public IMembershipService MembershipService { get; set; }
+        // TODO: use facade to improve testability
+        public MembershipServiceClient MembershipService { get; set; }
 
         protected override void Initialize(RequestContext requestContext)
         {
             if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
-            if (MembershipService == null) { MembershipService = new AccountMembershipService(); }
+            if (MembershipService == null) { MembershipService = new MembershipServiceClient(); }
 
             base.Initialize(requestContext);
         }
@@ -80,7 +76,7 @@ namespace VX.Web.Controllers
 
         public ActionResult Register()
         {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            ViewData["PasswordLength"] = MembershipService.GetMinPasswordLength();
             return View();
         }
 
@@ -104,7 +100,7 @@ namespace VX.Web.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            ViewData["PasswordLength"] = MembershipService.GetMinPasswordLength();
             return View(model);
         }
 
@@ -115,7 +111,7 @@ namespace VX.Web.Controllers
         [Authorize]
         public ActionResult ChangePassword()
         {
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            ViewData["PasswordLength"] = MembershipService.GetMinPasswordLength();
             return View();
         }
 
@@ -136,7 +132,7 @@ namespace VX.Web.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+            ViewData["PasswordLength"] = MembershipService.GetMinPasswordLength();
             return View(model);
         }
 
