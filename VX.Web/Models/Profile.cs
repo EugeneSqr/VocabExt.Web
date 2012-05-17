@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Profile;
+﻿using System.Web.Profile;
 
 namespace VX.Web.Models
 {
@@ -15,12 +14,12 @@ namespace VX.Web.Models
             return (Profile)Create(userName);
         }
 
-        public List<int> ActiveVocabularyBanks
+        public int[] ActiveVocabularyBanks
         {
             get
             {
-                var result = base["ActiveVocabularyBanks"] as List<int>;
-                return result ?? new List<int>();
+                var result = base["ActiveVocabularyBanks"] as int[];
+                return result ?? new int[] { };
             }
 
             set

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel.Activation;
+using System.Web;
 using System.Web.Security;
 using VX.Web.Models;
 
@@ -65,6 +67,20 @@ namespace VX.Web
             {
                 return false;
             }
+        }
+
+        public int[] GetVocabBanks(string username, string password)
+        {
+            var userNameNotEmpty = string.IsNullOrEmpty(username)
+                ? "anonymous" 
+                : username;
+            var passwordNotNull = string.IsNullOrEmpty(password) 
+                ? "anonymous" 
+                : password;
+
+            return ValidateUser(userNameNotEmpty, passwordNotNull)
+                ? Profile.GetCurrent(userNameNotEmpty).ActiveVocabularyBanks 
+                : new int[] {};
         }
     }
 }

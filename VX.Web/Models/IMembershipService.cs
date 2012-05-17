@@ -17,5 +17,8 @@ namespace VX.Web.Models
 
         [OperationContract]
         bool ChangePassword(string userName, string oldPassword, string newPassword);
+
+        [OperationContract]
+        int[] GetVocabBanks(string username, string password);
     }
 }

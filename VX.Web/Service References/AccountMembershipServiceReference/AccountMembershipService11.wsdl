@@ -6,6 +6,7 @@
       <xsd:import schemaLocation="https://eskurikhin.domain.corp/AccountMembershipService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="https://eskurikhin.domain.corp/AccountMembershipService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="https://eskurikhin.domain.corp/AccountMembershipService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/System.Web.Security" />
+      <xsd:import schemaLocation="https://eskurikhin.domain.corp/AccountMembershipService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IMembershipService_GetMinPasswordLength_InputMessage">
@@ -32,6 +33,12 @@
   <wsdl:message name="IMembershipService_ChangePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:ChangePasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="IMembershipService_GetVocabBanks_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetVocabBanks" />
+  </wsdl:message>
+  <wsdl:message name="IMembershipService_GetVocabBanks_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetVocabBanksResponse" />
+  </wsdl:message>
   <wsdl:portType name="IMembershipService">
     <wsdl:operation name="GetMinPasswordLength">
       <wsdl:input wsaw:Action="http://tempuri.org/IMembershipService/GetMinPasswordLength" message="tns:IMembershipService_GetMinPasswordLength_InputMessage" />
@@ -48,6 +55,10 @@
     <wsdl:operation name="ChangePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IMembershipService/ChangePassword" message="tns:IMembershipService_ChangePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMembershipService/ChangePasswordResponse" message="tns:IMembershipService_ChangePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVocabBanks">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMembershipService/GetVocabBanks" message="tns:IMembershipService_GetVocabBanks_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMembershipService/GetVocabBanksResponse" message="tns:IMembershipService_GetVocabBanks_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:service name="AccountMembershipService">

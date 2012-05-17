@@ -23,6 +23,7 @@
   <Metadata>
     <MetadataFile FileName="AccountMembershipService3.xsd" MetadataType="Schema" ID="a3fdfe3e-3a75-4c46-a7b5-e85d9d9aeea3" SourceId="1" SourceUrl="https://eskurikhin.domain.corp/AccountMembershipService.svc?xsd=xsd0" />
     <MetadataFile FileName="AccountMembershipService1.wsdl" MetadataType="Wsdl" ID="fc4909a9-4b66-4bc8-a131-aedd28969da0" SourceId="1" SourceUrl="https://eskurikhin.domain.corp/AccountMembershipService.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="AccountMembershipService.xsd" MetadataType="Schema" ID="f987c8ff-5e12-4b3e-b69f-fcd2b69e60b6" SourceId="1" SourceUrl="https://eskurikhin.domain.corp/AccountMembershipService.svc?xsd=xsd3" />
     <MetadataFile FileName="AccountMembershipService31.xsd" MetadataType="Schema" ID="3854b049-9980-4898-8cfd-34e6b5845d64" SourceId="1" SourceUrl="https://eskurikhin.domain.corp/AccountMembershipService.svc?xsd=xsd1" />
     <MetadataFile FileName="AccountMembershipService11.wsdl" MetadataType="Wsdl" ID="528c63b9-c31d-4393-a54d-9dfa185ec00c" SourceId="1" SourceUrl="https://eskurikhin.domain.corp/AccountMembershipService.svc?wsdl" />
     <MetadataFile FileName="AccountMembershipService1.disco" MetadataType="Disco" ID="8cd0869e-06fc-4360-9112-bce68a01ec84" SourceId="1" SourceUrl="https://eskurikhin.domain.corp/AccountMembershipService.svc?disco" />

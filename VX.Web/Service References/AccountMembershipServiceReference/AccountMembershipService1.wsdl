@@ -66,5 +66,14 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetVocabBanks">
+      <soap:operation soapAction="http://tempuri.org/IMembershipService/GetVocabBanks" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
 </wsdl:definitions>

@@ -26,6 +26,9 @@ namespace VX.Web.AccountMembershipServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMembershipService/ChangePassword", ReplyAction="http://tempuri.org/IMembershipService/ChangePasswordResponse")]
         bool ChangePassword(string userName, string oldPassword, string newPassword);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMembershipService/GetVocabBanks", ReplyAction="http://tempuri.org/IMembershipService/GetVocabBanksResponse")]
+        int[] GetVocabBanks(string username);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -69,6 +72,10 @@ namespace VX.Web.AccountMembershipServiceReference {
         
         public bool ChangePassword(string userName, string oldPassword, string newPassword) {
             return base.Channel.ChangePassword(userName, oldPassword, newPassword);
+        }
+        
+        public int[] GetVocabBanks(string username) {
+            return base.Channel.GetVocabBanks(username);
         }
     }
 }
