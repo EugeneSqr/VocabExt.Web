@@ -89,6 +89,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\VocabExtServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="AccountMembershipService.svc" />
@@ -128,6 +133,13 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService1.disco" />
+    <None Include="Service References\VocabExtServiceReference\VocabExtService.disco" />
+    <None Include="Service References\VocabExtServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\VocabExtServiceReference\configuration.svcinfo" />
+    <None Include="Service References\VocabExtServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -159,6 +171,19 @@
     <Content Include="Views\Shared\LogOnUserControl.ascx" />
     <Content Include="Views\Shared\Site.Master" />
     <Content Include="Views\Web.config" />
+    <None Include="Service References\VocabExtServiceReference\VocabExtService.wsdl" />
+    <None Include="Service References\VocabExtServiceReference\VocabExtService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\VocabExtServiceReference\VocabExtService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\VocabExtServiceReference\VocabExtService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\VocabExtServiceReference\VocabExtService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -168,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\AccountMembershipServiceReference\" />
+    <WCFMetadataStorage Include="Service References\VocabExtServiceReference\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
