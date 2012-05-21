@@ -3,3 +3,4 @@ C:\GIT\VocabExt.Web\VX.Web.Infrasructure\bin\Debug\VX.Web.Infrasructure.pdb
 C:\GIT\VocabExt.Web\VX.Web.Infrasructure\obj\Debug\ResolveAssemblyReference.cache
 C:\GIT\VocabExt.Web\VX.Web.Infrasructure\obj\Debug\VX.Web.Infrasructure.dll
 C:\GIT\VocabExt.Web\VX.Web.Infrasructure\obj\Debug\VX.Web.Infrasructure.pdb
+C:\GIT\VocabExt.Web\VX.Web.Infrasructure\bin\Debug\VX.Web.Infrasructure.dll.config

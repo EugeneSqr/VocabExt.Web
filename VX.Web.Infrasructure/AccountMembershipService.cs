@@ -1,10 +1,9 @@
 ﻿using System;
-using System.ServiceModel.Activation;
+using System.Linq;
 using System.Web.Security;
 
-namespace VX.Web.Infrasructure
+namespace VX.Web.Infrastructure
 {
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class AccountMembershipService : IMembershipService
     {
         private readonly MembershipProvider _provider;
@@ -66,24 +65,34 @@ namespace VX.Web.Infrasructure
             }
         }
 
-        public int[] GetVocabBanks(string username, string password)
+        public Profile GetCurrentUserProfile()
         {
-            var userNameNotEmpty = string.IsNullOrEmpty(username)
-                ? "anonymous"
-                : username;
-            var passwordNotNull = string.IsNullOrEmpty(password)
-                ? "anonymous"
-                : password;
+            var membershipUser = Membership.GetUser();
 
-            return ValidateUser(userNameNotEmpty, passwordNotNull)
-                ? Profile.GetCurrent(userNameNotEmpty).ActiveVocabularyBanks
-                : new int[] { };
+            return membershipUser == null 
+                ? null 
+                : Profile.GetCurrent(membershipUser.UserName);
+        }
+
+        public Profile GetUserProfileByToken(Guid token)
+        {
+            // TODO: performance issue
+            var user = Membership.GetAllUsers()
+                .Cast<MembershipUser>()
+                .First(item => Profile.GetCurrent(item.UserName).ActiveToken == token);
+            
+            return Profile.GetCurrent(user.UserName);
         }
 
         public bool PostVocabBanks(string vocabBanks)
         {
-            var currentUser = Membership.GetUser();
-            Profile.GetCurrent(currentUser.UserName).ActiveVocabularyBanks = new[] { 1, 2, 3 };
+            var currentUser = GetCurrentUserProfile();
+            if (currentUser == null)
+            {
+                return false;
+            }
+
+            currentUser.ActiveVocabularyBanks = new[] { 1, 2, 3 };
             return true;
         }
     }

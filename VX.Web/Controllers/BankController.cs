@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using VX.Web.ProfileServiceReference;
 
 namespace VX.Web.Controllers
 {
@@ -8,7 +9,9 @@ namespace VX.Web.Controllers
         public ActionResult Index()
         {
             // TODO: just a stub. Replace with proper implementation (with autofac)
-            ViewData["SubscribedVocabularies"] = new JavaScriptSerializer().Serialize(new[] { 1, 3, 4 });
+            ProfileServiceClient serviceClient = new ProfileServiceClient();
+            ViewData["SubscribedVocabularies"] = new JavaScriptSerializer()
+                .Serialize(serviceClient.GetCurrentUserVocabBanks());
             return View();
         }
     }

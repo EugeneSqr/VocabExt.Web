@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Security;
-using VX.Web.Infrasructure;
+using VX.Web.Infrastructure;
 using VX.Web.Models;
 
 namespace VX.Web.Controllers

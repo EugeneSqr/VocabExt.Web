@@ -40,8 +40,13 @@
     <Reference Include="Autofac.Integration.Mvc">
       <HintPath>..\..\VocabExt\.Libraries\Autofac\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Integration.Wcf">
+      <HintPath>..\..\VocabExt\.Libraries\Autofac\Autofac.Integration.Wcf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations">
@@ -58,6 +63,7 @@
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml" />
     <Reference Include="VX.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\VocabExt\.Libraries\VX.Domain.dll</HintPath>
@@ -72,6 +78,11 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\ProfileServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\VocabExtServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -79,6 +90,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AuthService.svc" />
     <Content Include="Content\css\site.css" />
     <Content Include="Content\Images\bullet.gif" />
     <Content Include="Content\Images\button-bg.jpg" />
@@ -94,6 +106,16 @@
     <Content Include="Content\Images\quote.gif" />
     <Content Include="Content\Images\square-green.png" />
     <Content Include="Global.asax" />
+    <None Include="Service References\ProfileServiceReference\ProfileService.wsdl" />
+    <None Include="Service References\ProfileServiceReference\ProfileService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProfileServiceReference\ProfileService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProfileServiceReference\ProfileService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\VocabExtServiceReference\VocabExtService.disco" />
     <None Include="Service References\VocabExtServiceReference\configuration91.svcinfo" />
     <None Include="Service References\VocabExtServiceReference\configuration.svcinfo" />
@@ -101,8 +123,16 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="ProfileService.svc" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
+    <None Include="Service References\ProfileServiceReference\ProfileService.disco" />
+    <None Include="Service References\ProfileServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\ProfileServiceReference\configuration.svcinfo" />
+    <None Include="Service References\ProfileServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Views\Bank\Index.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -158,12 +188,13 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ProfileServiceReference\" />
     <WCFMetadataStorage Include="Service References\VocabExtServiceReference\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VX.Web.Infrasructure\VX.Web.Infrasructure.csproj">
+    <ProjectReference Include="..\VX.Web.Infrasructure\VX.Web.Infrastructure.csproj">
       <Project>{2FE8D0C5-1AB7-4AB3-940A-D40A83F37015}</Project>
-      <Name>VX.Web.Infrasructure</Name>
+      <Name>VX.Web.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

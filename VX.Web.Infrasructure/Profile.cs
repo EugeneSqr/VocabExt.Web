@@ -1,6 +1,7 @@
-﻿using System.Web.Profile;
+﻿using System;
+using System.Web.Profile;
 
-namespace VX.Web.Infrasructure
+namespace VX.Web.Infrastructure
 {
     public class Profile : ProfileBase
     {
@@ -25,6 +26,16 @@ namespace VX.Web.Infrasructure
             set
             {
                 base["ActiveVocabularyBanks"] = value;
+                Save();
+            }
+        }
+
+        public Guid ActiveToken
+        {
+            get { return base["ActiveToken"] is Guid ? (Guid) base["ActiveToken"] : Guid.Empty; }
+            set
+            {
+                base["ActiveToken"] = value;
                 Save();
             }
         }

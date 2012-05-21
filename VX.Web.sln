@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VX.Web", "VX.Web\VX.Web.csproj", "{8A2E9C70-308F-457E-92F2-AA6D3A83110E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VX.Web.Infrasructure", "VX.Web.Infrasructure\VX.Web.Infrasructure.csproj", "{2FE8D0C5-1AB7-4AB3-940A-D40A83F37015}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VX.Web.Infrastructure", "VX.Web.Infrasructure\VX.Web.Infrastructure.csproj", "{2FE8D0C5-1AB7-4AB3-940A-D40A83F37015}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
