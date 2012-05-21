@@ -2,7 +2,7 @@
 using System.ServiceModel.Web;
 using System.Web.Security;
 
-namespace VX.Web.Models
+namespace VX.Web.Infrasructure
 {
     [ServiceContract]
     public interface IMembershipService

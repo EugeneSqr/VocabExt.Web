@@ -1,6 +1,6 @@
 ﻿using System.Web.Profile;
 
-namespace VX.Web.Models
+namespace VX.Web.Infrasructure
 {
     public class Profile : ProfileBase
     {

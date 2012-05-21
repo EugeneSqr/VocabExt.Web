@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
+using VX.Web.Infrasructure;
+using VX.Web.Models;
 
 namespace VX.Web
 {
@@ -27,6 +29,15 @@ namespace VX.Web
         {
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
+
+            builder.RegisterType<AccountMembershipService>()
+                .As<IMembershipService>()
+                .InstancePerHttpRequest();
+
+            builder.RegisterType<FormsAuthenticationService>()
+                .As<IFormsAuthenticationService>()
+                .InstancePerHttpRequest();
+
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 

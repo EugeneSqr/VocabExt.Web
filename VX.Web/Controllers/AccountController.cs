@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
-using VX.Web.AccountMembershipServiceReference;
+using VX.Web.Infrasructure;
 using VX.Web.Models;
 
 namespace VX.Web.Controllers
@@ -11,16 +10,16 @@ namespace VX.Web.Controllers
     [HandleError]
     public class AccountController : Controller
     {
-        public IFormsAuthenticationService FormsService { get; set; }
-        // TODO: use facade to improve testability
-        public MembershipServiceClient MembershipService { get; set; }
+        private readonly IFormsAuthenticationService formsService;
 
-        protected override void Initialize(RequestContext requestContext)
+        private readonly IMembershipService membershipService;
+
+        public AccountController(
+            IMembershipService membershipService, 
+            IFormsAuthenticationService formsAuthenticationService)
         {
-            if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
-            if (MembershipService == null) { MembershipService = new MembershipServiceClient(); }
-
-            base.Initialize(requestContext);
+            this.membershipService = membershipService;
+            formsService = formsAuthenticationService;
         }
 
         // **************************************
@@ -37,22 +36,18 @@ namespace VX.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (MembershipService.ValidateUser(model.UserName, model.Password))
+                if (membershipService.ValidateUser(model.UserName, model.Password))
                 {
-                    FormsService.SignIn(model.UserName, model.RememberMe);
+                    formsService.SignIn(model.UserName, model.RememberMe);
                     if (!String.IsNullOrEmpty(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    
+                    return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                }
+                
+                ModelState.AddModelError("", "The user name or password provided is incorrect.");
             }
 
             // If we got this far, something failed, redisplay form
@@ -65,7 +60,7 @@ namespace VX.Web.Controllers
 
         public ActionResult LogOff()
         {
-            FormsService.SignOut();
+            formsService.SignOut();
 
             return RedirectToAction("Index", "Home");
         }
@@ -76,7 +71,7 @@ namespace VX.Web.Controllers
 
         public ActionResult Register()
         {
-            ViewData["PasswordLength"] = MembershipService.GetMinPasswordLength();
+            ViewData["PasswordLength"] = membershipService.GetMinPasswordLength();
             return View();
         }
 
@@ -86,21 +81,19 @@ namespace VX.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to register the user
-                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
+                MembershipCreateStatus createStatus = membershipService.CreateUser(model.UserName, model.Password, model.Email);
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
-                    FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
+                    formsService.SignIn(model.UserName, false /* createPersistentCookie */);
                     return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
-                }
+
+                ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["PasswordLength"] = MembershipService.GetMinPasswordLength();
+            ViewData["PasswordLength"] = membershipService.GetMinPasswordLength();
             return View(model);
         }
 
@@ -111,7 +104,7 @@ namespace VX.Web.Controllers
         [Authorize]
         public ActionResult ChangePassword()
         {
-            ViewData["PasswordLength"] = MembershipService.GetMinPasswordLength();
+            ViewData["PasswordLength"] = membershipService.GetMinPasswordLength();
             return View();
         }
 
@@ -121,18 +114,16 @@ namespace VX.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
+                if (membershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
                 {
                     return RedirectToAction("ChangePasswordSuccess");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-                }
+                
+                ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
             }
 
             // If we got this far, something failed, redisplay form
-            ViewData["PasswordLength"] = MembershipService.GetMinPasswordLength();
+            ViewData["PasswordLength"] = membershipService.GetMinPasswordLength();
             return View(model);
         }
 

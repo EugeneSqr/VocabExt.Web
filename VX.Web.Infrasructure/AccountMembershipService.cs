@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ServiceModel.Activation;
-using System.ServiceModel.Web;
 using System.Web.Security;
-using VX.Web.Models;
 
-namespace VX.Web
+namespace VX.Web.Infrasructure
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class AccountMembershipService : IMembershipService
@@ -71,21 +69,21 @@ namespace VX.Web
         public int[] GetVocabBanks(string username, string password)
         {
             var userNameNotEmpty = string.IsNullOrEmpty(username)
-                ? "anonymous" 
+                ? "anonymous"
                 : username;
-            var passwordNotNull = string.IsNullOrEmpty(password) 
-                ? "anonymous" 
+            var passwordNotNull = string.IsNullOrEmpty(password)
+                ? "anonymous"
                 : password;
 
             return ValidateUser(userNameNotEmpty, passwordNotNull)
-                ? Profile.GetCurrent(userNameNotEmpty).ActiveVocabularyBanks 
-                : new int[] {};
+                ? Profile.GetCurrent(userNameNotEmpty).ActiveVocabularyBanks
+                : new int[] { };
         }
 
         public bool PostVocabBanks(string vocabBanks)
         {
             var currentUser = Membership.GetUser();
-            Profile.GetCurrent(currentUser.UserName).ActiveVocabularyBanks = new [] { 1 ,2 , 3};
+            Profile.GetCurrent(currentUser.UserName).ActiveVocabularyBanks = new[] { 1, 2, 3 };
             return true;
         }
     }
