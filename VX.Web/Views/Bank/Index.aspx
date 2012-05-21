@@ -11,45 +11,92 @@
             <th>Used</th>
             <th>Name</th>
             <th>Descriprion</th>
-            <th>Tag</th>        
+            <th>Tag</th>
+            <th>Test</th>
         </tr></thead>
         <tbody data-bind="foreach: vocabularies">
-            <tr data-bind="click: showTranslations">
-                <td><input type="checkbox"/> </td>
-                <td data-bind= "text: Name"></td>
+            <tr>
+                <td><input type="checkbox" data-bind="checked: isUsed, click: sendUpdateRequest"/> </td>
+                <td><span data-bind= "text: Name"/></td>
                 <td data-bind = "text: Description"></td>
-                <td></td>
+                <td><div data-bind="click: showTranslations">Expand</div></td>
+                <td><div data-bind="click: check">asdf</div></td>
             </tr>
             <tr>
-                <td colspan="4">empty</td>
+                <td colspan="5">
+                    <table>
+                        <tbody data-bind="foreach: translations">
+                            <tr>
+                                <td data-Bind="text: Source"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
             </tr>
         </tbody>
     </table>
 
     <script type="text/javascript">
-        /*var mapping = {
-            vocabularies: {
-                key: function (data) {
-                    return ko.utils.unwrapObservable(data.Id);
-                },
-                create: function (options) {
-                    return new ListItemViewModel(options.data);
-                }
-            }
-        };*/
-
         function ListItemViewModel(data) {
             var self = this;
 
-            self.showTranslations = function() {
-                console.log(self.Name());
+            self.translationsShown = ko.observable(true);
+
+            self.translations = ko.observableArray();
+
+            self.isUsed = ko.observable(false);
+
+            self.Id = ko.observable(data.Id);
+
+            ko.computed(function () {
+                self.isUsed(listViewModel.subscribedVocabularies().indexOf(this.Id()) != -1);
+            }, self);
+
+            self.sendUpdateRequest = function() {
+                console.log(this);
+                listViewModel.subscribedVocabularies.remove(this.Id());
+                return true;
+            };
+
+            self.check = function() {
+                listViewModel.subscribedVocabularies.push(this.Id());
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://vx.com/AccountMembershipService.svc/restService/PostVocabBanks/1',
+                    data: {name:"John"}
+                });
+            };
+
+            self.showTranslations = function () {
+                if (self.translationsShown()) {
+                    $.ajax({
+                        url: 'http://vx-service.com/VocabExtService.svc/restService/GetTranslations/' + self.Id(),
+                        datatype: 'json',
+                        success: function (translationsData) {
+                            var translations = eval(translationsData);
+                            self.translations.removeAll();
+                            for (index in translations) {
+                                self.translations.push({ Source: translations[index].Source.Spelling });
+                            }
+
+                            self.translationsShown(false);
+                        },
+                        error: function () {
+                            self.translationsShown(false);
+                        }
+                    });
+                } else {
+                    self.translations.removeAll();
+                    self.translationsShown(true);
+                }
             };
 
             ko.mapping.fromJS(data, {}, self);
         }
 
         var listViewModel = {
-            vocabularies: ko.observableArray()
+            vocabularies: ko.observableArray(),
+            subscribedVocabularies: ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>))
         };
 
         ko.computed(function () {
@@ -57,13 +104,14 @@
                 url: 'http://vx-service.com/VocabExtService.svc/restService/GetVocabBanksList',
                 dataType: 'json',
                 success: function (data) {
-                    for (index in data) {
-                        /*listViewModel.vocabularies.push(data[index]);*/
-                        listViewModel.vocabularies.push(new ListItemViewModel(data[index]));
+                    var vocabularies = eval(data);
+                    for (index in vocabularies) {
+                        listViewModel.vocabularies.push(new ListItemViewModel(vocabularies[index]));
                     }
                 }
             });
         }, listViewModel);
+        
         ko.applyBindings(listViewModel);
     </script>
 </asp:Content>

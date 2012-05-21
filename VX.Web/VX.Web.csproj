@@ -40,6 +40,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -113,18 +114,17 @@
     <Content Include="Content\Images\quote.gif" />
     <Content Include="Content\Images\square-green.png" />
     <Content Include="Global.asax" />
-    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService.xsd">
+    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService.wsdl" />
+    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService1.wsdl" />
-    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService11.wsdl" />
-    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService3.xsd">
+    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService11.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService31.xsd">
+    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService12.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService32.xsd">
+    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService13.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\AccountMembershipServiceReference\configuration91.svcinfo" />
@@ -133,7 +133,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService1.disco" />
     <None Include="Service References\VocabExtServiceReference\VocabExtService.disco" />
     <None Include="Service References\VocabExtServiceReference\configuration91.svcinfo" />
     <None Include="Service References\VocabExtServiceReference\configuration.svcinfo" />
@@ -143,6 +142,7 @@
     </None>
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
+    <None Include="Service References\AccountMembershipServiceReference\AccountMembershipService.disco" />
     <Content Include="Views\Bank\Index.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

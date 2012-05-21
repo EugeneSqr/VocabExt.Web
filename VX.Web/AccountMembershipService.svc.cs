@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ServiceModel.Activation;
-using System.Web;
+using System.ServiceModel.Web;
 using System.Web.Security;
 using VX.Web.Models;
 
@@ -81,6 +80,13 @@ namespace VX.Web
             return ValidateUser(userNameNotEmpty, passwordNotNull)
                 ? Profile.GetCurrent(userNameNotEmpty).ActiveVocabularyBanks 
                 : new int[] {};
+        }
+
+        public bool PostVocabBanks(string vocabBanks)
+        {
+            var currentUser = Membership.GetUser();
+            Profile.GetCurrent(currentUser.UserName).ActiveVocabularyBanks = new [] { 1 ,2 , 3};
+            return true;
         }
     }
 }
