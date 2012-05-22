@@ -2,7 +2,7 @@
 using System.ServiceModel.Activation;
 using System.Web.Security;
 
-namespace VX.Web.Infrasructure
+namespace VX.Web.Infrastructure
 {
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class AccountMembershipService : IMembershipService

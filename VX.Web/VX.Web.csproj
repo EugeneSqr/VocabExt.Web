@@ -162,9 +162,9 @@
     <WCFMetadataStorage Include="Service References\VocabExtServiceReference\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VX.Web.Infrasructure\VX.Web.Infrasructure.csproj">
+    <ProjectReference Include="..\VX.Web.Infrasructure\VX.Web.Infrastructure.csproj">
       <Project>{2FE8D0C5-1AB7-4AB3-940A-D40A83F37015}</Project>
-      <Name>VX.Web.Infrasructure</Name>
+      <Name>VX.Web.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

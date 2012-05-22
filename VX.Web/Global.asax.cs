@@ -3,7 +3,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Mvc;
-using VX.Web.Infrasructure;
+using VX.Web.Infrastructure;
 using VX.Web.Models;
 
 namespace VX.Web
