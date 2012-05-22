@@ -1,5 +1,7 @@
 VX.Web/bin/
 VX.Web/obj/
+VX.Web.Infrastructure/bin/
+VX.Web.Infrastructure/obj/
 _ReSharper.VX.Web/
 VX.Web.suo
 VX.Web.sln.DotSettings.user
