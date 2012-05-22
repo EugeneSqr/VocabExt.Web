@@ -162,7 +162,7 @@
     <WCFMetadataStorage Include="Service References\VocabExtServiceReference\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VX.Web.Infrasructure\VX.Web.Infrastructure.csproj">
+    <ProjectReference Include="..\VX.Web.Infrastructure\VX.Web.Infrastructure.csproj">
       <Project>{2FE8D0C5-1AB7-4AB3-940A-D40A83F37015}</Project>
       <Name>VX.Web.Infrastructure</Name>
     </ProjectReference>
