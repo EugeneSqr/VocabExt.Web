@@ -79,6 +79,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AccountMembershipService.svc" />
     <Content Include="Content\css\site.css" />
     <Content Include="Content\Images\bullet.gif" />
     <Content Include="Content\Images\button-bg.jpg" />
