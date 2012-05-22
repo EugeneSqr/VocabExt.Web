@@ -12,7 +12,6 @@
             <th>Name</th>
             <th>Descriprion</th>
             <th>Tag</th>
-            <th>Test</th>
         </tr></thead>
         <tbody data-bind="foreach: vocabularies">
             <tr>
@@ -20,10 +19,9 @@
                 <td><span data-bind= "text: Name"/></td>
                 <td data-bind = "text: Description"></td>
                 <td><div data-bind="click: showTranslations">Expand</div></td>
-                <td><div data-bind="click: check">asdf</div></td>
             </tr>
             <tr>
-                <td colspan="5">
+                <td colspan="4">
                     <table>
                         <tbody data-bind="foreach: translations">
                             <tr>
@@ -40,7 +38,7 @@
         function ListItemViewModel(data) {
             var self = this;
 
-            self.translationsShown = ko.observable(true);
+            self.translationsShown = ko.observable(false);
 
             self.translations = ko.observableArray();
 
@@ -53,24 +51,26 @@
             }, self);
 
             self.sendUpdateRequest = function() {
-                console.log(this);
-                listViewModel.subscribedVocabularies.remove(this.Id());
-                return true;
-            };
-
-            self.check = function() {
-                listViewModel.subscribedVocabularies.push(this.Id());
+                if (self.isUsed()) {
+                    if (listViewModel.subscribedVocabularies().indexOf(this.Id()) == -1) {
+                        listViewModel.subscribedVocabularies.push(this.Id());   
+                    }
+                } else {
+                    listViewModel.subscribedVocabularies.remove(this.Id());
+                }
+                
                 $.ajax({
                     type: 'POST',
-                    url: 'http://vx.com/AccountMembershipService.svc/restService/PostVocabBanks/1',
-                    data: {name:"John"}
+                    url: listViewModel.postBanksUrl,
+                    data: JSON.stringify(listViewModel.subscribedVocabularies())
                 });
+                return true;
             };
-
+            
             self.showTranslations = function () {
-                if (self.translationsShown()) {
+                if (!self.translationsShown()) {
                     $.ajax({
-                        url: 'http://vx-service.com/VocabExtService.svc/restService/GetTranslations/' + self.Id(),
+                        url: listViewModel.getTranslationsUrl + '/' + self.Id(),
                         datatype: 'json',
                         success: function (translationsData) {
                             var translations = eval(translationsData);
@@ -79,15 +79,15 @@
                                 self.translations.push({ Source: translations[index].Source.Spelling });
                             }
 
-                            self.translationsShown(false);
+                            self.translationsShown(true);
                         },
                         error: function () {
-                            self.translationsShown(false);
+                            self.translationsShown(true);
                         }
                     });
                 } else {
                     self.translations.removeAll();
-                    self.translationsShown(true);
+                    self.translationsShown(false);
                 }
             };
 
@@ -96,12 +96,15 @@
 
         var listViewModel = {
             vocabularies: ko.observableArray(),
-            subscribedVocabularies: ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>))
+            subscribedVocabularies: ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>)),
+            getTranslationsUrl: 'http://vx-service.com/VocabExtService.svc/restService/GetTranslations',
+            getBanksListUrl: 'http://vx-service.com/VocabExtService.svc/restService/GetVocabBanksList',
+            postBanksUrl: 'http://vx.com/AccountMembershipService.svc/restService/PostVocabBanks'
         };
 
         ko.computed(function () {
             $.ajax({
-                url: 'http://vx-service.com/VocabExtService.svc/restService/GetVocabBanksList',
+                url: listViewModel.getBanksListUrl,
                 dataType: 'json',
                 success: function (data) {
                     var vocabularies = eval(data);

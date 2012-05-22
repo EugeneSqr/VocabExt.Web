@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.ServiceModel.Activation;
+using System.Web.Script.Serialization;
 using System.Web.Security;
 
 namespace VX.Web.Infrastructure
@@ -80,11 +82,33 @@ namespace VX.Web.Infrastructure
                 : new int[] { };
         }
 
-        public bool PostVocabBanks(string vocabBanks)
+        public int[] GetVocabBanksCurrentUser()
+        {
+            var currentProfile = GetCurrentUserProfile();
+            return currentProfile != null 
+                ? currentProfile.ActiveVocabularyBanks 
+                : new int[] { };
+        }
+
+        public bool PostVocabBanks(Stream data)
+        {
+            var currentProfile = GetCurrentUserProfile();
+            if (currentProfile != null)
+            {
+                string message = new StreamReader(data).ReadToEnd();
+                currentProfile.ActiveVocabularyBanks = new JavaScriptSerializer().Deserialize<int[]>(message);
+                return true;
+            }
+            
+            return false;
+        }
+
+        private static Profile GetCurrentUserProfile()
         {
             var currentUser = Membership.GetUser();
-            Profile.GetCurrent(currentUser.UserName).ActiveVocabularyBanks = new[] { 1, 2, 3 };
-            return true;
+            return currentUser != null 
+                ? Profile.GetCurrent(currentUser.UserName) 
+                : null;
         }
     }
 }

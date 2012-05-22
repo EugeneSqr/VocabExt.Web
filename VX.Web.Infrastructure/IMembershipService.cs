@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.IO;
+using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Web.Security;
 
@@ -27,7 +28,10 @@ namespace VX.Web.Infrastructure
         int[] GetVocabBanks(string username, string password);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "PostVocabBanks/{vocabBanks}", BodyStyle = WebMessageBodyStyle.Wrapped)]
-        bool PostVocabBanks(string vocabBanks);
+        int[] GetVocabBanksCurrentUser();
+
+        [OperationContract]
+        [WebInvoke(Method = "POST")]
+        bool PostVocabBanks(Stream data);
     }
 }
