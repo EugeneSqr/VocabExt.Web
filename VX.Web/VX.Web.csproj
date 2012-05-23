@@ -34,11 +34,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\..\VocabExt\.Libraries\Autofac\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\.Libraries\Autofac\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Integration.Mvc">
-      <HintPath>..\..\VocabExt\.Libraries\Autofac\Autofac.Integration.Mvc.dll</HintPath>
+    <Reference Include="Autofac.Integration.Mvc, Version=2.6.1.841, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\.Libraries\Autofac\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ServiceModel" />
@@ -60,7 +62,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="VX.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\VocabExt\.Libraries\VX.Domain.dll</HintPath>
+      <HintPath>..\.Libraries\VX.Domain.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -123,7 +125,9 @@
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="Views\Shared\LogOnUserControl.ascx" />
     <Content Include="Views\Shared\Site.Master" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Service References\VocabExtServiceReference\VocabExtService.wsdl" />
     <None Include="Service References\VocabExtServiceReference\VocabExtService.xsd">
       <SubType>Designer</SubType>
