@@ -30,6 +30,10 @@ namespace VX.Web
             var builder = new ContainerBuilder();
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
+            builder.RegisterType<SettingsReader>()
+                .As<ISettingsReader>()
+                .InstancePerHttpRequest();
+
             builder.RegisterType<AccountMembershipService>()
                 .As<IMembershipService>()
                 .InstancePerHttpRequest();

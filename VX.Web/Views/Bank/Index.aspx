@@ -97,9 +97,9 @@
         var listViewModel = {
             vocabularies: ko.observableArray(),
             subscribedVocabularies: ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>)),
-            getTranslationsUrl: 'http://vx-service.com/VocabExtService.svc/restService/GetTranslations',
-            getBanksListUrl: 'http://vx-service.com/VocabExtService.svc/restService/GetVocabBanksList',
-            postBanksUrl: 'http://vx.com/AccountMembershipService.svc/restService/PostVocabBanks'
+            getTranslationsUrl: '<%:ViewData["VocabExtServiceRest"] %>' + 'GetTranslations',
+            getBanksListUrl: '<%:ViewData["VocabExtServiceRest"] %>' + 'GetVocabBanksList',
+            postBanksUrl: '<%:ViewData["MembershipServiceRest"] %>' + 'PostVocabBanks'
         };
 
         ko.computed(function () {
