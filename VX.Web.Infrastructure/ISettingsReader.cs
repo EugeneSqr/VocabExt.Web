@@ -4,10 +4,6 @@
     {
         string VocabExtServiceRest { get; }
 
-        string VocabExtServiceSoap { get; }
-
         string MembershipServiceRest { get; }
-
-        string MembershipServiceSoap { get; }
     }
 }
