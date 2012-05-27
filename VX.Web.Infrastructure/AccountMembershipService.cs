@@ -9,7 +9,7 @@ namespace VX.Web.Infrastructure
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class AccountMembershipService : IMembershipService
     {
-        private readonly MembershipProvider _provider;
+        private readonly MembershipProvider provider;
 
         public AccountMembershipService()
             : this(null)
@@ -18,20 +18,18 @@ namespace VX.Web.Infrastructure
 
         public AccountMembershipService(MembershipProvider provider)
         {
-            _provider = provider ?? Membership.Provider;
+            this.provider = provider ?? Membership.Provider;
         }
 
         public int GetMinPasswordLength()
         {
-            return _provider.MinRequiredPasswordLength;
+            return provider.MinRequiredPasswordLength;
         }
 
         public bool ValidateUser(string userName, string password)
         {
-            if (String.IsNullOrEmpty(userName)) throw new ArgumentException("Value cannot be null or empty.", "userName");
-            if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
-
-            return _provider.ValidateUser(userName, password);
+            return !String.IsNullOrEmpty(userName) && !String.IsNullOrEmpty(password) &&
+                   provider.ValidateUser(userName, password);
         }
 
         public MembershipCreateStatus CreateUser(string userName, string password, string email)
@@ -41,7 +39,7 @@ namespace VX.Web.Infrastructure
             if (String.IsNullOrEmpty(email)) throw new ArgumentException("Value cannot be null or empty.", "email");
 
             MembershipCreateStatus status;
-            _provider.CreateUser(userName, password, email, null, null, true, null, out status);
+            provider.CreateUser(userName, password, email, null, null, true, null, out status);
             return status;
         }
 
@@ -55,7 +53,7 @@ namespace VX.Web.Infrastructure
             // than return false in certain failure scenarios.
             try
             {
-                MembershipUser currentUser = _provider.GetUser(userName, true /* userIsOnline */);
+                MembershipUser currentUser = provider.GetUser(userName, true /* userIsOnline */);
                 return currentUser.ChangePassword(oldPassword, newPassword);
             }
             catch (ArgumentException)
@@ -70,16 +68,9 @@ namespace VX.Web.Infrastructure
 
         public int[] GetVocabBanks(string username, string password)
         {
-            var userNameNotEmpty = string.IsNullOrEmpty(username)
-                ? "anonymous"
-                : username;
-            var passwordNotNull = string.IsNullOrEmpty(password)
-                ? "anonymous"
-                : password;
-
-            return ValidateUser(userNameNotEmpty, passwordNotNull)
-                ? Profile.GetCurrent(userNameNotEmpty).ActiveVocabularyBanks
-                : new int[] { };
+            return ValidateUser(username, password)
+                       ? Profile.GetCurrent(username).ActiveVocabularyBanks
+                       : new int[] {};
         }
 
         public int[] GetVocabBanksCurrentUser()
