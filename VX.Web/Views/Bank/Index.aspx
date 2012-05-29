@@ -26,6 +26,7 @@
                         <tbody data-bind="foreach: translations">
                             <tr>
                                 <td data-Bind="text: Source"></td>
+                                <td data-Bind="text: Target"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -76,7 +77,10 @@
                             var translations = eval(translationsData);
                             self.translations.removeAll();
                             for (index in translations) {
-                                self.translations.push({ Source: translations[index].Source.Spelling });
+                                self.translations.push({
+                                    Source: translations[index].Source.Spelling,
+                                    Target: translations[index].Target.Spelling
+                                });
                             }
 
                             self.translationsShown(true);
