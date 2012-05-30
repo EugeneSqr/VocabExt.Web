@@ -36,6 +36,7 @@
     </table>
 
     <script type="text/javascript">
+        jQuery.support.cors = true;
         function ListItemViewModel(data) {
             var self = this;
 
@@ -109,13 +110,20 @@
         ko.computed(function () {
             $.ajax({
                 url: listViewModel.getBanksListUrl,
-                dataType: 'json',
+                dataType: 'jsonp',
+                jsonpCallback: "BanksList",
                 success: function (data) {
                     var vocabularies = eval(data);
                     for (index in vocabularies) {
                         listViewModel.vocabularies.push(new ListItemViewModel(vocabularies[index]));
                     }
+                },
+                error: function(data, textStatus, errorThrown) {
+                    console.log(data);
+                    console.log(textStatus);
+                    console.log(errorThrown);
                 }
+                
             });
         }, listViewModel);
         
