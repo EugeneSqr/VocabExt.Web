@@ -73,7 +73,8 @@
                 if (!self.translationsShown()) {
                     $.ajax({
                         url: listViewModel.getTranslationsUrl + '/' + self.Id(),
-                        datatype: 'json',
+                        dataType: 'jsonp',
+                        jsonpCallback: "Translations",
                         success: function (translationsData) {
                             var translations = eval(translationsData);
                             self.translations.removeAll();
