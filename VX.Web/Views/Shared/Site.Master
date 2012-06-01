@@ -1,4 +1,5 @@
 <%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+<%@ Import Namespace="VX.Web.Infrastructure" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -19,7 +20,7 @@
     <div id="header">
         <div id="header-content">
             <h1 id="logo-text">
-                <a href="index.html" title="">Vocab<span>Extender</span></a></h1>
+                <a href="/">Vocab<span>Extender</span></a></h1>
             <h2 id="slogan">
                 Extend your vocabulary!</h2>
             <div id="header-links">
@@ -30,10 +31,11 @@
     <!-- navigation starts here -->
     <div id="nav-wrap">
         <div id="nav">
+            <%  string currentAction = ViewContext.RouteData.Values["action"].ToString();
+                string currentController = ViewContext.RouteData.Values["controller"].ToString(); %>
             <ul>
-                <li id="current">
-                    <%: Html.ActionLink("your banks", "Index", "Home")%></li>
-                <li><%: Html.ActionLink("downloads", "Downloads", "Home")%></li>
+                <%= Html.MenuItem("your banks", "Index", "Home", currentAction, currentController) %>
+                <%= Html.MenuItem("downloads", "Downloads", "Home", currentAction, currentController) %>
             </ul>
         </div>
     </div>

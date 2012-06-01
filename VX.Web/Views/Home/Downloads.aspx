@@ -8,4 +8,6 @@
 
 <h1>Downloads</h1>
 
+Download latest version <a href="https://github.com/Femel/VocabExt.Desktop/downloads">here</a>.
+
 </asp:Content>
