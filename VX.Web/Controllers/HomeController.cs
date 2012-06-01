@@ -1,23 +1,43 @@
 ﻿using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using VX.Web.Infrastructure;
 
 namespace VX.Web.Controllers
 {
     [HandleError]
     public class HomeController : Controller
     {
+        private readonly IMembershipService membershipService;
+        private readonly ISettingsReader settingsReader;
+
+        public HomeController(IMembershipService membershipService, ISettingsReader settingsReader)
+        {
+            this.membershipService = membershipService;
+            this.settingsReader = settingsReader;
+        }
+
+        [Authorize]
         public ActionResult Index()
         {
-            /*var service = new VocabServiceFacade();*/
-            /*ViewData["Message"] = service.GetData(1);*/
-            /*ViewData["Message"] = service.GetLanguage().Name;*/
-            /*ViewData["Message"] = service.GetTask().Question.Spelling;*/
-            /*Profile.GetCurrent(HttpContext.Profile).ActiveVocabularyBanks = new List<int> { 3, 4 };*/
+            ViewData["SubscribedVocabularies"] = Serialize(membershipService.GetVocabBanksCurrentUser());
+            ViewData["VocabExtServiceRest"] = settingsReader.VocabExtServiceRest;
+            ViewData["MembershipServiceRest"] = settingsReader.MembershipServiceRest;
+            return View();
+        }
+
+        public ActionResult Downloads()
+        {
             return View();
         }
 
         public ActionResult About()
         {
             return View();
+        }
+
+        private static string Serialize(object objectToSerialize)
+        {
+            return new JavaScriptSerializer().Serialize(objectToSerialize);
         }
     }
 }

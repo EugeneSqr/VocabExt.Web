@@ -67,7 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -83,19 +82,18 @@
   <ItemGroup>
     <Content Include="AccountMembershipService.svc" />
     <Content Include="Content\css\site.css" />
-    <Content Include="Content\Images\bullet.gif" />
-    <Content Include="Content\Images\button-bg.jpg" />
+    <Content Include="Content\Images\boxbg.jpg" />
     <Content Include="Content\Images\clock.gif" />
     <Content Include="Content\Images\comment.gif" />
-    <Content Include="Content\Images\content.jpg" />
-    <Content Include="Content\Images\dots.jpg" />
     <Content Include="Content\Images\firefox-gray.jpg" />
-    <Content Include="Content\Images\footer.jpg" />
-    <Content Include="Content\Images\header.jpg" />
-    <Content Include="Content\Images\menu.jpg" />
+    <Content Include="Content\Images\footer-dots.jpg" />
+    <Content Include="Content\Images\headerbg.jpg" />
+    <Content Include="Content\Images\menubg.jpg" />
+    <Content Include="Content\Images\nav-current.jpg" />
     <Content Include="Content\Images\page.gif" />
-    <Content Include="Content\Images\quote.gif" />
-    <Content Include="Content\Images\square-green.png" />
+    <Content Include="Content\Images\rssfeed.gif" />
+    <Content Include="Content\Images\sidebarsep.jpg" />
+    <Content Include="Content\Images\sidebullet.gif" />
     <Content Include="Global.asax" />
     <None Include="Service References\VocabExtServiceReference\VocabExtService.disco" />
     <None Include="Service References\VocabExtServiceReference\configuration91.svcinfo" />
@@ -106,7 +104,7 @@
     </None>
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
-    <Content Include="Views\Bank\Index.aspx" />
+    <Content Include="Views\Home\Downloads.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
