@@ -6,34 +6,39 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <h1>These are your <span class="white">vocabulary banks</span></h1>
-    <table>
-        <thead><tr>
-            <th>Used</th>
-            <th>Name</th>
-            <th>Descriprion</th>
-        </tr></thead>
-        <tbody data-bind="foreach: vocabularies">
-            <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
-                <td><input type="checkbox" data-bind="checked: isUsed, click: sendUpdateRequest"/> </td>
-                <td style="cursor: pointer" data-bind="click: showTranslations"><span data-bind= "text: Name"/></td>
-                <td data-bind = "text: Description"></td>
-            </tr>
-            <tr data-bind="visible: translationsShown, css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
-                <td colspan="3">
-                    <table class="borderless">
-                        <tbody data-bind="template: { foreach: translations, 
-                                                        afterAdd: showTranslation }">
-                            <tr>
-                                <td data-Bind="text: SourceSpelling"></td>
-                                <td data-Bind="text: SourceTranscription"></td>
-                                <td data-Bind="text: TargetSpelling"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="loading" align="center" data-bind="slideVisible : showLoading">
+        <img style="background: transparent; border: 0px" src="/Content/Images/loader.gif" alt="loading"/>
+    </div>
+    <div id="dynamicContent" data-bind="slideVisible : showContent">
+        <table>
+            <thead><tr>
+                <th>Used</th>
+                <th>Name</th>
+                <th>Descriprion</th>
+            </tr></thead>
+            <tbody data-bind="foreach: vocabularies">
+                <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
+                    <td><input type="checkbox" data-bind="checked: isUsed, click: sendUpdateRequest"/> </td>
+                    <td style="cursor: pointer" data-bind="click: showTranslations"><span data-bind= "text: Name"/></td>
+                    <td data-bind = "text: Description"></td>
+                </tr>
+                <tr data-bind="visible: translationsShown, css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
+                    <td colspan="3">
+                        <table class="borderless">
+                            <tbody data-bind="template: { foreach: translations, 
+                                                            afterAdd: showTranslation }">
+                                <tr>
+                                    <td data-Bind="text: SourceSpelling"></td>
+                                    <td data-Bind="text: SourceTranscription"></td>
+                                    <td data-Bind="text: TargetSpelling"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <script type="text/javascript">
         jQuery.support.cors = true;
@@ -106,13 +111,23 @@
             ko.mapping.fromJS(data, {}, self);
         }
 
-        var listViewModel = {
-            vocabularies: ko.observableArray(),
-            subscribedVocabularies: ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>)),
-            getTranslationsUrl: '<%:ViewData["VocabExtServiceRest"] %>' + 'GetTranslations',
-            getBanksListUrl: '<%:ViewData["VocabExtServiceRest"] %>' + 'GetVocabBanksList',
-            postBanksUrl: '<%:ViewData["MembershipServiceRest"] %>' + 'PostVocabBanks'
-        };
+        function ListViewModel() {
+            var self = this;
+
+            self.showLoading = ko.observable(true);
+            self.showContent = ko.computed(function() {
+                return !self.showLoading();
+            });
+            
+            self.vocabularies = ko.observableArray();
+            self.subscribedVocabularies = ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>));
+            self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetTranslations';
+            self.getBanksListUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetVocabBanksList';
+            self.postBanksUrl = '<%:ViewData["MembershipServiceRest"] %>' + 'PostVocabBanks';
+  
+        }
+        
+        var listViewModel = new ListViewModel();
 
         ko.computed(function () {
             $.ajax({
@@ -124,6 +139,7 @@
                     for (index in vocabularies) {
                         listViewModel.vocabularies.push(new ListItemViewModel(vocabularies[index]));
                     }
+                    listViewModel.showLoading(false);
                 },
                 error: function(data, textStatus, errorThrown) {
                     console.log(data);
@@ -134,16 +150,16 @@
             });
         }, listViewModel);
         
-        /*ko.bindingHandlers.slideVisible = {
-        init: function(element, valueAccessor) {
-            var value = valueAccessor();
-            $(element).toggle(ko.utils.unwrapObservable(value));
-        },
-        update: function(element, valueAccessor) {
-            var value = valueAccessor();
-            ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
-        }
-};*/
+        ko.bindingHandlers.slideVisible = {
+            init: function(element, valueAccessor) {
+                var value = valueAccessor();
+                $(element).toggle(ko.utils.unwrapObservable(value));
+            },
+            update: function(element, valueAccessor) {
+                var value = valueAccessor();
+                ko.utils.unwrapObservable(value) ? $(element).slideDown() : $(element).slideUp();
+            }
+        };
         
         ko.applyBindings(listViewModel);
     </script>

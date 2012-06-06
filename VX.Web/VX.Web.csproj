@@ -88,6 +88,7 @@
     <Content Include="Content\Images\firefox-gray.jpg" />
     <Content Include="Content\Images\footer-dots.jpg" />
     <Content Include="Content\Images\headerbg.jpg" />
+    <Content Include="Content\Images\loader.gif" />
     <Content Include="Content\Images\menubg.jpg" />
     <Content Include="Content\Images\nav-current.jpg" />
     <Content Include="Content\Images\page.gif" />
