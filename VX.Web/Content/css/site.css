@@ -471,7 +471,7 @@ can turn it into a fixed width layout by setting a pixel value to the width (e.g
 #rightPanel 
 {
     margin-left: 330px; 
-    overflow: auto;
+    overflow: hidden;
     border: 1px solid #0065C6;
     background-color: #1E89DC;
     padding: 10px;
@@ -519,5 +519,24 @@ img.rssfeed {
 
 .borderless td, tr {
     border: 0px;
+}
+
+div.banksList {
+    background-color: #93BC0C;
+    color: white;
+    cursor: pointer;
+    border: 2px solid #8EB200;
+    font-weight: bold;
+    margin: 5px;
+    padding: 5px;
+    text-align: center;
+}
+
+div.banksList:hover {
+    color: #333;
+}
+
+input.bankDetails {
+    width: 300px;
 }
 
