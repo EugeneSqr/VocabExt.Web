@@ -1,27 +1,21 @@
 ﻿using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using VX.Web.Infrastructure;
 
 namespace VX.Web.Controllers
 {
     [HandleError]
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
-        private readonly IMembershipService membershipService;
-        private readonly ISettingsReader settingsReader;
-
-        public HomeController(IMembershipService membershipService, ISettingsReader settingsReader)
+        public HomeController(IMembershipService membershipService, ISettingsReader settingsReader) : base(membershipService, settingsReader)
         {
-            this.membershipService = membershipService;
-            this.settingsReader = settingsReader;
         }
 
         [Authorize]
         public ActionResult Index()
         {
-            ViewData["SubscribedVocabularies"] = Serialize(membershipService.GetVocabBanksCurrentUser());
-            ViewData["VocabExtServiceRest"] = settingsReader.VocabExtServiceRest;
-            ViewData["MembershipServiceRest"] = settingsReader.MembershipServiceRest;
+            ViewData["SubscribedVocabularies"] = Serialize(MembershipService.GetVocabBanksCurrentUser());
+            ViewData["VocabExtServiceRest"] = SettingsReader.VocabExtServiceRest;
+            ViewData["MembershipServiceRest"] = SettingsReader.MembershipServiceRest;
             return View();
         }
 
@@ -33,11 +27,6 @@ namespace VX.Web.Controllers
         public ActionResult About()
         {
             return View();
-        }
-
-        private static string Serialize(object objectToSerialize)
-        {
-            return new JavaScriptSerializer().Serialize(objectToSerialize);
         }
     }
 }

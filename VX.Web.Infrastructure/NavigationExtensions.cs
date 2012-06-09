@@ -14,7 +14,7 @@ namespace VX.Web.Infrastructure
             string currentController)
         {
             TagBuilder tb = new TagBuilder("li");
-            if (action == currentAction && controller == currentController)
+            if (controller == currentController && action == currentAction)
                 tb.GenerateId("current");
 
             tb.SetInnerText("{0}");

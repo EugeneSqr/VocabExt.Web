@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\EntitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -105,6 +107,9 @@
     </None>
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\ko.SlideVisible.js" />
+    <Content Include="Views\Entities\Banks.aspx" />
+    <Content Include="Views\Entities\Index.aspx" />
     <Content Include="Views\Home\Downloads.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
