@@ -31,34 +31,21 @@
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
                         <td data-bind="text: source" />
                         <td data-bind="text: target" />
-                        <td><input type="button" data-bind="click: $parent.editTranslation" value="Edit"/></td>
+                        <td>
+                            <input type="button" data-bind="click: openEditDialog" value="Edit"/>
+                            <div id="dialog" data-bind="dialog: {autoOpen: false, title: 'testing' }, dialogVisible: editDialogVisible">
+                                <input data-bind="value: source" />
+                                <a href="#" data-bind="click: closeEditDialog">close</a>
+                            </div>
+                        </td>
                         <td><input type="button" value="Delete"/></td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        
-        <div id="dialog" title="Dialog Title" data-bind="text: bankName">
-            <div data-bind="text: source"></div>
-		    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        </div>
-    
+    </div>
     <div class="clear"></div>
     <script type="text/javascript">
-        window.$editTranslationDialog = $('#dialog');
-        window.$editTranslationDialog.dialog({
-            autoOpen: false,
-            width: 600,
-            buttons: {
-                "Ok": function () {
-                    $(this).dialog("close");
-                },
-                "Cancel": function () {
-                    $(this).dialog("close");
-                }
-            }
-        });
-        
         function BanksListModel() {
             var self = this;
 
@@ -102,16 +89,10 @@
             self.bankDescription = bankData.Description;
             self.translationsShown = ko.observable(false);
             self.translations = ko.observableArray();
-            self.activeTranslation = ko.observable(self.translations[0]);
             
             self.loadingShown = ko.computed(function() {
                 return !self.translationsShown();
             });
-
-            self.editTranslation = function (translation) {
-                self.activeTranslation(translation);
-                window.$editTranslationDialog.dialog('open');
-            };
         }
         
         function TranslationModel(translationData) {
@@ -120,6 +101,14 @@
             self.id = translationData.id;
             self.source = new WordModel(translationData.Source);
             self.target = new WordModel(translationData.Target);
+            self.editDialogVisible = ko.observable(false);
+
+            self.openEditDialog = function() {
+                self.editDialogVisible(true);
+            };
+            self.closeEditDialog = function() {
+                self.editDialogVisible(false);
+            };
         }
         
         function WordModel(wordData) {
