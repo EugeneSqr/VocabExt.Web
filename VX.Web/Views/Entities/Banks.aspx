@@ -29,12 +29,22 @@
             <table>
                 <tbody data-bind="foreach: translations">
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
-                        <td data-bind="text: source" />
-                        <td data-bind="text: target" />
+                        <td data-bind="text: activeSource" />
+                        <td data-bind="text: activeTarget" />
                         <td>
                             <input type="button" data-bind="click: openEditDialog" value="Edit"/>
-                            <div id="dialog" data-bind="dialog: {autoOpen: false, title: 'testing' }, dialogVisible: editDialogVisible">
-                                <input data-bind="value: source" />
+                            <div data-bind="dialog: {autoOpen: false, title: 'testing' }, dialogVisible: editDialogVisible">
+                                
+	                            <input id="tags" data-bind="autocomplete: {source: sourceOptions }"/>
+                                
+                                <div data-bind="with: activeSource">
+                                    <div data-bind="text: spelling"></div>
+                                    <div data-bind="text: transcription"></div>
+                                </div>
+                                <div data-bind="with: activeTarget">
+                                    <div data-bind="text: spelling"></div>
+                                    <div data-bind="text: transcription"></div>
+                                </div>
                                 <a href="#" data-bind="click: closeEditDialog">close</a>
                             </div>
                         </td>
@@ -99,9 +109,36 @@
             var self = this;
             
             self.id = translationData.id;
-            self.source = new WordModel(translationData.Source);
-            self.target = new WordModel(translationData.Target);
+            self.activeSource = new WordModel(translationData.Source);
+            self.activeTarget = new WordModel(translationData.Target);
             self.editDialogVisible = ko.observable(false);
+            
+            self.sourceSearchString = ko.observable(self.activeSource.spelling());
+            self.targetSearchString = ko.observable(self.activeTarget.spelling());
+
+            self.sourceOptions = ko.observableArray([
+                    "ActionScript",
+                    "AppleScript",
+                    "Asp",
+                    "BASIC",
+                    "C",
+                    "C++",
+                    "Clojure",
+                    "COBOL",
+                    "ColdFusion",
+                    "Erlang",
+                    "Fortran",
+                    "Groovy",
+                    "Haskell",
+                    "Java",
+                    "JavaScript",
+                    "Lisp",
+                    "Perl",
+                    "PHP",
+                    "Python",
+                    "Ruby",
+                    "Scala",
+                    "Scheme"]);
 
             self.openEditDialog = function() {
                 self.editDialogVisible(true);

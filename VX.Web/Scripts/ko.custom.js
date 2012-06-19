@@ -22,3 +22,13 @@ ko.bindingHandlers.dialog = {
         $(element).dialog(shouldBeOpen ? "open" : "close");
     }
 };
+
+ko.bindingHandlers.autocomplete = {
+    init: function (element, valueAccessor) {
+        var parameters = ko.utils.unwrapObservable(valueAccessor()) || {};
+        $(element).autocomplete({ source: parameters.source() });
+    },
+    update: function (element, valueAccessor, allBindingsAccessor) {
+
+    }
+}
