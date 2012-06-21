@@ -35,7 +35,11 @@
                             <input type="button" data-bind="click: openEditDialog" value="Edit"/>
                             <div data-bind="dialog: {autoOpen: false, title: 'testing' }, dialogVisible: editDialogVisible">
                                 
-	                            <input id="tags" data-bind="autocomplete: {source: sourceOptions }"/>
+	                            <input id="tags" data-bind="autocomplete: { 
+                                        source: banksListViewModel.sourceOptions(), 
+                                        select: function(event, ui) {console.log(ui.item); return false;}
+                                    }, 
+                                    sourceSearchString: banksListViewModel.sourceSearchString"/>
                                 
                                 <div data-bind="with: activeSource">
                                     <div data-bind="text: spelling"></div>
@@ -68,6 +72,11 @@
             self.activeBank = ko.observable();
             self.getBanksListUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetVocabBanksList';
             self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetTranslations';
+            self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetWords';
+
+            self.sourceOptions = ko.observableArray();
+
+            self.sourceSearchString = ko.observable("");
 
             self.displayDetails = function (bankDetailsModel) {
                 self.activeBank(bankDetailsModel);
@@ -112,35 +121,8 @@
             self.activeSource = new WordModel(translationData.Source);
             self.activeTarget = new WordModel(translationData.Target);
             self.editDialogVisible = ko.observable(false);
-            
-            self.sourceSearchString = ko.observable(self.activeSource.spelling());
-            self.targetSearchString = ko.observable(self.activeTarget.spelling());
 
-            self.sourceOptions = ko.observableArray([
-                    "ActionScript",
-                    "AppleScript",
-                    "Asp",
-                    "BASIC",
-                    "C",
-                    "C++",
-                    "Clojure",
-                    "COBOL",
-                    "ColdFusion",
-                    "Erlang",
-                    "Fortran",
-                    "Groovy",
-                    "Haskell",
-                    "Java",
-                    "JavaScript",
-                    "Lisp",
-                    "Perl",
-                    "PHP",
-                    "Python",
-                    "Ruby",
-                    "Scala",
-                    "Scheme"]);
-
-            self.openEditDialog = function() {
+            self.openEditDialog = function () {
                 self.editDialogVisible(true);
             };
             self.closeEditDialog = function() {
@@ -178,6 +160,28 @@
                 }
 
             });
+        }, banksListViewModel);
+
+        ko.computed(function () {
+            if (banksListViewModel.sourceSearchString() != "") {
+                var targetUrl = banksListViewModel.getWordsUrl + "/" + banksListViewModel.sourceSearchString();
+                $.ajax({
+                    url: targetUrl,
+                    dataType: 'jsonp',
+                    jsonpCallback: "WordsList",
+                    success: function (wordsData) {
+                        banksListViewModel.sourceOptions.removeAll();
+                        for (index in wordsData) {
+                            banksListViewModel.sourceOptions().push({ label: wordsData[index].Spelling, value: wordsData[index] });
+                        }
+                    },
+                    error: function (data, textStatus, errorThrown) {
+                        console.log(data);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                });
+            }
         }, banksListViewModel);
         ko.applyBindings(banksListViewModel);
     </script>
