@@ -29,15 +29,15 @@
             <table>
                 <tbody data-bind="foreach: translations">
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
-                        <td data-bind="text: activeSource" />
-                        <td data-bind="text: activeTarget" />
+                        <td data-bind="text: activeSource().spelling" />
+                        <td data-bind="text: activeTarget.spelling" />
                         <td>
                             <input type="button" data-bind="click: openEditDialog" value="Edit"/>
                             <div data-bind="dialog: {autoOpen: false, title: 'testing' }, dialogVisible: editDialogVisible">
                                 
 	                            <input id="tags" data-bind="autocomplete: { 
                                         source: banksListViewModel.sourceOptions(), 
-                                        select: function(event, ui) {console.log(ui.item); return false;}
+                                        select: fillSourceFromAutocomplete
                                     }, 
                                     sourceSearchString: banksListViewModel.sourceSearchString"/>
                                 
@@ -75,6 +75,7 @@
             self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetWords';
 
             self.sourceOptions = ko.observableArray();
+            self.sourceOptionsRaw = [];
 
             self.sourceSearchString = ko.observable("");
 
@@ -118,7 +119,7 @@
             var self = this;
             
             self.id = translationData.id;
-            self.activeSource = new WordModel(translationData.Source);
+            self.activeSource = ko.observable(new WordModel(translationData.Source));
             self.activeTarget = new WordModel(translationData.Target);
             self.editDialogVisible = ko.observable(false);
 
@@ -128,12 +129,21 @@
             self.closeEditDialog = function() {
                 self.editDialogVisible(false);
             };
+
+            self.fillSourceFromAutocomplete = function (event, ui) {
+                for (index in banksListViewModel.sourceOptionsRaw) {
+                    if (banksListViewModel.sourceOptionsRaw[index].Spelling == ui.item.value) {
+                        self.activeSource(new WordModel(banksListViewModel.sourceOptionsRaw[index]));
+                        break;
+                    }
+                }
+            };
         }
         
         function WordModel(wordData) {
             var self = this;
             
-            self.id = wordData.id;
+            self.id = wordData.Id;
             self.spelling = ko.observable(wordData.Spelling);
             self.transcription = ko.observable(wordData.Transcription);
         }
@@ -171,8 +181,10 @@
                     jsonpCallback: "WordsList",
                     success: function (wordsData) {
                         banksListViewModel.sourceOptions.removeAll();
+                        banksListViewModel.sourceOptionsRaw = wordsData;
                         for (index in wordsData) {
-                            banksListViewModel.sourceOptions().push({ label: wordsData[index].Spelling, value: wordsData[index] });
+                            console.log(wordsData[index]);
+                            banksListViewModel.sourceOptions().push(wordsData[index].Spelling);
                         }
                     },
                     error: function (data, textStatus, errorThrown) {

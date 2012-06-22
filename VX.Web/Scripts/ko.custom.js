@@ -34,7 +34,8 @@ ko.bindingHandlers.autocomplete = {
                 }
             }
         });
-        $(element).autocomplete(parameters());
+
+        $element.autocomplete(parameters());
     },
     update: function (element, parameters) {
         console.log("check");
