@@ -29,25 +29,24 @@
             <table>
                 <tbody data-bind="foreach: translations">
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
-                        <td data-bind="text: activeSource().spelling" />
-                        <td data-bind="text: activeTarget.spelling" />
+                        <td data-bind="text: activeSource().Spelling" />
+                        <td data-bind="text: activeTarget.Spelling" />
                         <td>
                             <input type="button" data-bind="click: openEditDialog" value="Edit"/>
-                            <div data-bind="dialog: {autoOpen: false, title: 'testing' }, dialogVisible: editDialogVisible">
+                            <div data-bind="dialog: {autoOpen: false, buttons: { 'Save': updateTranslation} }, dialogVisible: editDialogVisible">
                                 
 	                            <input id="tags" data-bind="autocomplete: { 
                                         source: banksListViewModel.sourceOptions(), 
                                         select: fillSourceFromAutocomplete
                                     }, 
                                     sourceSearchString: banksListViewModel.sourceSearchString"/>
-                                
                                 <div data-bind="with: activeSource">
-                                    <div data-bind="text: spelling"></div>
-                                    <div data-bind="text: transcription"></div>
+                                    <div data-bind="text: Spelling"></div>
+                                    <div data-bind="text: Transcription"></div>
                                 </div>
                                 <div data-bind="with: activeTarget">
-                                    <div data-bind="text: spelling"></div>
-                                    <div data-bind="text: transcription"></div>
+                                    <div data-bind="text: Spelling"></div>
+                                    <div data-bind="text: Transcription"></div>
                                 </div>
                                 <a href="#" data-bind="click: closeEditDialog">close</a>
                             </div>
@@ -70,9 +69,10 @@
             
             self.vocabularies = ko.observableArray();
             self.activeBank = ko.observable();
-            self.getBanksListUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetVocabBanksList';
-            self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetTranslations';
-            self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetWords';
+            self.getBanksListUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetVocabBanksList';
+            self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetTranslations';
+            self.updateTranslationUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'UpdateTranslation';
+            self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetWords';
 
             self.sourceOptions = ko.observableArray();
             self.sourceOptionsRaw = [];
@@ -117,8 +117,9 @@
         
         function TranslationModel(translationData) {
             var self = this;
-            
-            self.id = translationData.id;
+
+            self.__type = translationData.__type;
+            self.Id = translationData.Id;
             self.activeSource = ko.observable(new WordModel(translationData.Source));
             self.activeTarget = new WordModel(translationData.Target);
             self.editDialogVisible = ko.observable(false);
@@ -138,14 +139,43 @@
                     }
                 }
             };
+
+            self.updateTranslation = function () {
+                var xhr = new easyXDM.Rpc({
+                    remote: "http://vx-service.com/Infrastructure/easyXDM/cors/index.html"
+                }, {
+                    remote: {
+                        request: {}
+                    }
+                });
+                
+                xhr.request({
+                    url: banksListViewModel.updateTranslationUrl,
+                    method: "POST",
+                    data: ko.toJSON({__type: self.__type, Id : self.Id, Source: self.activeSource, Target: self.activeTarget})
+                }, function () {
+                    console.log("done");
+                });
+            };
         }
         
         function WordModel(wordData) {
             var self = this;
-            
-            self.id = wordData.Id;
-            self.spelling = ko.observable(wordData.Spelling);
-            self.transcription = ko.observable(wordData.Transcription);
+
+            self.__type = wordData.__type;
+            self.Id = wordData.Id;
+            self.Language = new LanguageModel(wordData.Language);
+            self.Spelling = ko.observable(wordData.Spelling);
+            self.Transcription = ko.observable(wordData.Transcription);
+        }
+        
+        function LanguageModel(languageData) {
+            var self = this;
+
+            self.__type = languageData.__type;
+            self.Id = languageData.Id;
+            self.Name = languageData.Name;
+            self.Abbreviation = languageData.Abbreviation;
         }
 
         var banksListViewModel = new BanksListModel();
