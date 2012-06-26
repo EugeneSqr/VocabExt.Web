@@ -540,3 +540,21 @@ input.bankDetails {
     width: 300px;
 }
 
+div.dialog-left-column {
+    width: 200px; 
+    float: left;
+}
+
+div.dialog-middle-column {
+    width: 50px;
+    height: 50px;
+    margin-top: 50px;
+    background: url(../Images/green-arrow.png) no-repeat left center;
+    float: left;
+}
+
+div.dialog-right-column {
+    width: 200px; 
+    float: left;
+}
+

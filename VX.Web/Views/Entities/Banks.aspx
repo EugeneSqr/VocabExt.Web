@@ -33,22 +33,45 @@
                         <td data-bind="text: activeTarget.Spelling" />
                         <td>
                             <input type="button" data-bind="click: openEditDialog" value="Edit"/>
-                            <div data-bind="dialog: {autoOpen: false, buttons: { 'Save': updateTranslation} }, dialogVisible: editDialogVisible">
+                            <div data-bind="dialog: {
+                                    autoOpen: false,
+                                    draggable: false,
+                                    resizable: false,
+                                    modal: true,
+                                    width: 480,
+                                    height: 300,
+                                    title: 'Edit',
+                                    closeText: 'hide',
+                                    buttons: { 'Save': updateTranslation} }, 
+                                dialogVisible: editDialogVisible">
                                 
-	                            <input id="tags" data-bind="autocomplete: { 
-                                        source: banksListViewModel.sourceOptions(), 
-                                        select: fillSourceFromAutocomplete
-                                    }, 
-                                    sourceSearchString: banksListViewModel.sourceSearchString"/>
-                                <div data-bind="with: activeSource">
-                                    <div data-bind="text: Spelling"></div>
-                                    <div data-bind="text: Transcription"></div>
+	                            <div class="dialog-left-column">
+                                    <input data-bind="autocomplete: { 
+                                            source: banksListViewModel.sourceOptions(), 
+                                            select: fillSourceFromAutocomplete
+                                        }, 
+                                        searchString: banksListViewModel.sourceSearchString"/>
+                                    <div data-bind="with: activeSource">
+                                        <div data-bind="text: Spelling"></div>
+                                        <div data-bind="text: Transcription"></div>
+                                    </div>
                                 </div>
-                                <div data-bind="with: activeTarget">
-                                    <div data-bind="text: Spelling"></div>
-                                    <div data-bind="text: Transcription"></div>
+
+                                <div class="dialog-middle-column"></div>
+                                
+                                <div class="dialog-right-column">
+                                    <input data-bind="autocomplete: { 
+                                            source: banksListViewModel.targetOptions(), 
+                                            select: fillTargetFromAutocomplete
+                                        }, 
+                                        searchString: banksListViewModel.targetSearchString"/>
+                                    <div data-bind="with: activeTarget">
+                                        <div data-bind="text: Spelling"></div>
+                                        <div data-bind="text: Transcription"></div>
+                                    </div>
                                 </div>
-                                <a href="#" data-bind="click: closeEditDialog">close</a>
+                                
+                                <div class="clear" />
                             </div>
                         </td>
                         <td><input type="button" value="Delete"/></td>
@@ -76,8 +99,11 @@
 
             self.sourceOptions = ko.observableArray();
             self.sourceOptionsRaw = [];
+            self.targetOptions = ko.observableArray();
+            self.targetOptionsRaw = [];
 
             self.sourceSearchString = ko.observable("");
+            self.targetSearchString = ko.observable("");
 
             self.displayDetails = function (bankDetailsModel) {
                 self.activeBank(bankDetailsModel);
@@ -121,7 +147,7 @@
             self.__type = translationData.__type;
             self.Id = translationData.Id;
             self.activeSource = ko.observable(new WordModel(translationData.Source));
-            self.activeTarget = new WordModel(translationData.Target);
+            self.activeTarget = ko.observable(new WordModel(translationData.Target));
             self.editDialogVisible = ko.observable(false);
 
             self.openEditDialog = function () {
@@ -132,9 +158,17 @@
             };
 
             self.fillSourceFromAutocomplete = function (event, ui) {
-                for (index in banksListViewModel.sourceOptionsRaw) {
-                    if (banksListViewModel.sourceOptionsRaw[index].Spelling == ui.item.value) {
-                        self.activeSource(new WordModel(banksListViewModel.sourceOptionsRaw[index]));
+                self.fillFromAutocomplete(banksListViewModel.sourceOptionsRaw, self.activeSource, ui.item.value);
+            };
+
+            self.fillTargetFromAutocomplete = function (event, ui) {
+                self.fillFromAutocomplete(banksListViewModel.targetOptionsRaw, self.activeTarget, ui.item.value);
+            };
+
+            self.fillFromAutocomplete = function (source, target, selected) {
+                for (index in source) {
+                    if (source[index].Spelling == selected) {
+                        target(new WordModel(source[index]));
                         break;
                     }
                 }
@@ -203,27 +237,44 @@
         }, banksListViewModel);
 
         ko.computed(function () {
-            if (banksListViewModel.sourceSearchString() != "") {
-                var targetUrl = banksListViewModel.getWordsUrl + "/" + banksListViewModel.sourceSearchString();
-                $.ajax({
-                    url: targetUrl,
-                    dataType: 'jsonp',
-                    jsonpCallback: "WordsList",
-                    success: function (wordsData) {
-                        banksListViewModel.sourceOptions.removeAll();
-                        banksListViewModel.sourceOptionsRaw = wordsData;
-                        for (index in wordsData) {
-                            console.log(wordsData[index]);
-                            banksListViewModel.sourceOptions().push(wordsData[index].Spelling);
+            var sourceSearchString = banksListViewModel.sourceSearchString();
+            var targetSearchString = banksListViewModel.targetSearchString();
+
+            function getWords(searchString, success) {
+                if (searchString != "") {
+                    $.ajax({
+                        url: banksListViewModel.getWordsUrl + "/" + searchString,
+                        dataType: 'jsonp',
+                        jsonpCallback: "WordsList",
+                        success: success,
+                        error: function (data, textStatus, errorThrown) {
+                            console.log(data);
+                            console.log(textStatus);
+                            console.log(errorThrown);
                         }
-                    },
-                    error: function (data, textStatus, errorThrown) {
-                        console.log(data);
-                        console.log(textStatus);
-                        console.log(errorThrown);
+                    });
+                }
+            }
+
+            getWords(sourceSearchString,
+                function (wordsData) {
+                    banksListViewModel.sourceOptions.removeAll();
+                    banksListViewModel.sourceOptionsRaw = wordsData;
+                    for (index in wordsData) {
+                        console.log(wordsData[index]);
+                        banksListViewModel.sourceOptions().push(wordsData[index].Spelling);
                     }
                 });
-            }
+
+            getWords(targetSearchString,
+                function(wordsData) {
+                    banksListViewModel.targetOptions.removeAll();
+                    banksListViewModel.targetOptionsRaw = wordsData;
+                    for (index in wordsData) {
+                        console.log(wordsData[index]);
+                        banksListViewModel.targetOptions().push(wordsData[index].Spelling);
+                    }
+                });
         }, banksListViewModel);
         ko.applyBindings(banksListViewModel);
     </script>

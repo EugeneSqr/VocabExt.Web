@@ -29,8 +29,10 @@ ko.bindingHandlers.autocomplete = {
         $element.keyup(function () {
             var newValue = $element.val();
             if (newValue.length > 1) {
-                if (newValue.substring(0, 2) != allBindingsAccessor().sourceSearchString().substring(0, 2)) {
-                    allBindingsAccessor().sourceSearchString(newValue);
+                var searchString = allBindingsAccessor().searchString;
+                console.log(searchString());
+                if (newValue.substring(0, 2) != searchString().substring(0, 2)) {
+                    searchString(newValue);
                 }
             }
         });
@@ -38,7 +40,6 @@ ko.bindingHandlers.autocomplete = {
         $element.autocomplete(parameters());
     },
     update: function (element, parameters) {
-        console.log("check");
         $(element).autocomplete(parameters());
     }
 }
