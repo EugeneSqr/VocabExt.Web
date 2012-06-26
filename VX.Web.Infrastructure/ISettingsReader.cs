@@ -5,5 +5,7 @@
         string VocabExtServiceRest { get; }
 
         string MembershipServiceRest { get; }
+
+        string VocabExtServiceHost { get; }
     }
 }

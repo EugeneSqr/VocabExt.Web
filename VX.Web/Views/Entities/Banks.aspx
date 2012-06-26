@@ -30,7 +30,7 @@
                 <tbody data-bind="foreach: translations">
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
                         <td data-bind="text: activeSource().Spelling" />
-                        <td data-bind="text: activeTarget.Spelling" />
+                        <td data-bind="text: activeTarget().Spelling" />
                         <td>
                             <input type="button" data-bind="click: openEditDialog" value="Edit"/>
                             <div data-bind="dialog: {
@@ -39,35 +39,54 @@
                                     resizable: false,
                                     modal: true,
                                     width: 480,
-                                    height: 300,
+                                    height: 275,
                                     title: 'Edit',
-                                    closeText: 'hide',
-                                    buttons: { 'Save': updateTranslation} }, 
-                                dialogVisible: editDialogVisible">
+                                    buttons: { 
+                                        'Save': submitEditDialog, 
+                                        'Cancel': cancelEditDialog
+                                    } 
+                                }, 
+                                visible: editDialogVisible">
                                 
 	                            <div class="dialog-left-column">
-                                    <input data-bind="autocomplete: { 
+	                                
+	                                <div>Specify source:</div>
+                                    <input class="dialog-text-input" data-bind="autocomplete: { 
                                             source: banksListViewModel.sourceOptions(), 
-                                            select: fillSourceFromAutocomplete
+                                            select: fillSourceFromAutocomplete,
+                                            minLength: 2
                                         }, 
                                         searchString: banksListViewModel.sourceSearchString"/>
-                                    <div data-bind="with: activeSource">
-                                        <div data-bind="text: Spelling"></div>
-                                        <div data-bind="text: Transcription"></div>
+                                    
+                                    <div>Active source:</div>
+                                    <div class="dialog-group">
+                                        <div data-bind="with: activeSource">
+                                            <div>Spelling</div>
+                                            <input data-bind="value: Spelling" class="dialog-text-input" type="text" disabled="disabled"></input>
+                                            <div>Transcription</div>
+                                            <input data-bind="value: Transcription" class="dialog-text-input" type="text" disabled="disabled"></input>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="dialog-middle-column"></div>
                                 
                                 <div class="dialog-right-column">
-                                    <input data-bind="autocomplete: { 
+                                    <div>Specify target:</div>
+                                    <input class="dialog-text-input" data-bind="autocomplete: { 
                                             source: banksListViewModel.targetOptions(), 
-                                            select: fillTargetFromAutocomplete
+                                            select: fillTargetFromAutocomplete,
+                                            minLength: 2
                                         }, 
                                         searchString: banksListViewModel.targetSearchString"/>
-                                    <div data-bind="with: activeTarget">
-                                        <div data-bind="text: Spelling"></div>
-                                        <div data-bind="text: Transcription"></div>
+                                    <div>Active target:</div>
+                                    <div class="dialog-group">
+                                        <div data-bind="with: activeTarget">
+                                            <div>Spelling</div>
+                                            <input data-bind="value: Spelling" type="text" class="dialog-text-input" disabled="disabled"></input>
+                                            <div>Transcription</div>
+                                            <input data-bind="value: Transcription" type="text" class="dialog-text-input" disabled="disabled"></input>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -96,6 +115,7 @@
             self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetTranslations';
             self.updateTranslationUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'UpdateTranslation';
             self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetWords';
+            self.vocabServiceHost = '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html';
 
             self.sourceOptions = ko.observableArray();
             self.sourceOptionsRaw = [];
@@ -146,14 +166,40 @@
 
             self.__type = translationData.__type;
             self.Id = translationData.Id;
-            self.activeSource = ko.observable(new WordModel(translationData.Source));
-            self.activeTarget = ko.observable(new WordModel(translationData.Target));
+            self.originalSource = new WordModel(translationData.Source);
+            self.originalTarget = new WordModel(translationData.Target);
+            self.activeSource = ko.observable(self.originalSource);
+            self.activeTarget = ko.observable(self.originalTarget);
             self.editDialogVisible = ko.observable(false);
 
             self.openEditDialog = function () {
                 self.editDialogVisible(true);
             };
-            self.closeEditDialog = function() {
+
+            self.submitEditDialog = function () {
+                var xhr = new easyXDM.Rpc({
+                    remote: banksListViewModel.vocabServiceHost
+                }, {
+                    remote: {
+                        request: {}
+                    }
+                });
+
+                xhr.request({
+                    url: banksListViewModel.updateTranslationUrl,
+                    method: "POST",
+                    data: ko.toJSON({ __type: self.__type, Id: self.Id, Source: self.activeSource, Target: self.activeTarget })
+                }, function () {
+                    console.log("done");
+                });
+
+                self.editDialogVisible(false);
+            };
+
+            self.cancelEditDialog = function () {
+                console.log('restoring state');
+                self.activeSource(self.originalSource);
+                self.activeTarget(self.originalTarget);
                 self.editDialogVisible(false);
             };
 
@@ -172,24 +218,6 @@
                         break;
                     }
                 }
-            };
-
-            self.updateTranslation = function () {
-                var xhr = new easyXDM.Rpc({
-                    remote: "http://vx-service.com/Infrastructure/easyXDM/cors/index.html"
-                }, {
-                    remote: {
-                        request: {}
-                    }
-                });
-                
-                xhr.request({
-                    url: banksListViewModel.updateTranslationUrl,
-                    method: "POST",
-                    data: ko.toJSON({__type: self.__type, Id : self.Id, Source: self.activeSource, Target: self.activeTarget})
-                }, function () {
-                    console.log("done");
-                });
             };
         }
         
@@ -237,16 +265,13 @@
         }, banksListViewModel);
 
         ko.computed(function () {
-            var sourceSearchString = banksListViewModel.sourceSearchString();
-            var targetSearchString = banksListViewModel.targetSearchString();
-
-            function getWords(searchString, success) {
+            function getWords(searchString, successCallback, jsonpCallbackName) {
                 if (searchString != "") {
                     $.ajax({
                         url: banksListViewModel.getWordsUrl + "/" + searchString,
                         dataType: 'jsonp',
-                        jsonpCallback: "WordsList",
-                        success: success,
+                        jsonpCallback: jsonpCallbackName,
+                        success: successCallback,
                         error: function (data, textStatus, errorThrown) {
                             console.log(data);
                             console.log(textStatus);
@@ -256,25 +281,27 @@
                 }
             }
 
-            getWords(sourceSearchString,
+            getWords(
+                banksListViewModel.sourceSearchString(),
                 function (wordsData) {
                     banksListViewModel.sourceOptions.removeAll();
                     banksListViewModel.sourceOptionsRaw = wordsData;
                     for (index in wordsData) {
-                        console.log(wordsData[index]);
                         banksListViewModel.sourceOptions().push(wordsData[index].Spelling);
                     }
-                });
+                },
+                "SourceWordsList");
 
-            getWords(targetSearchString,
+            getWords(
+                banksListViewModel.targetSearchString(),
                 function(wordsData) {
                     banksListViewModel.targetOptions.removeAll();
                     banksListViewModel.targetOptionsRaw = wordsData;
                     for (index in wordsData) {
-                        console.log(wordsData[index]);
                         banksListViewModel.targetOptions().push(wordsData[index].Spelling);
                     }
-                });
+                },
+                "TargetWordsList");
         }, banksListViewModel);
         ko.applyBindings(banksListViewModel);
     </script>

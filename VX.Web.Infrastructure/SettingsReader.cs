@@ -6,6 +6,7 @@ namespace VX.Web.Infrastructure
     {
         private const string VocabExtServiceRestKey = "VocabExtServiceRest";
         private const string MembershipServiceRestKey = "MembershipServiceRest";
+        private const string VocabExtServiceHostKey = "VocabExtServiceHost";
         
         public string VocabExtServiceRest
         {
@@ -15,6 +16,11 @@ namespace VX.Web.Infrastructure
         public string MembershipServiceRest
         {
             get { return ConfigurationManager.AppSettings[MembershipServiceRestKey]; }
+        }
+
+        public string VocabExtServiceHost
+        {
+            get { return ConfigurationManager.AppSettings[VocabExtServiceHostKey]; }
         }
     }
 }

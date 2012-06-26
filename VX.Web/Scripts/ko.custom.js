@@ -10,28 +10,30 @@
 };
 
 ko.bindingHandlers.dialog = {
-    init: function (element, valueAccessor, allBindingsAccessor) {
-        var options = ko.utils.unwrapObservable(valueAccessor()) || {};
-        options.close = function () {
-            allBindingsAccessor().dialogVisible(false);
+    init: function (element, parameters) {
+        var options = ko.utils.unwrapObservable(parameters()) || {};
+        options.open = function() {
+            $(this).parent().children().children('.ui-dialog-titlebar-close').hide();
         };
+        
         $(element).dialog(options);
     },
     update: function (element, valueAccessor, allBindingsAccessor) {
-        var shouldBeOpen = ko.utils.unwrapObservable(allBindingsAccessor().dialogVisible);
-        $(element).dialog(shouldBeOpen ? "open" : "close");
+        var visible = ko.utils.unwrapObservable(allBindingsAccessor().visible);
+        $(element).dialog(visible ? "open" : "close");
     }
 };
 
 ko.bindingHandlers.autocomplete = {
     init: function (element, parameters, allBindingsAccessor) {
         var $element = $(element);
+        var allBindings = allBindingsAccessor();
+        var minLength = allBindings.autocomplete.minLength;
         $element.keyup(function () {
             var newValue = $element.val();
-            if (newValue.length > 1) {
-                var searchString = allBindingsAccessor().searchString;
-                console.log(searchString());
-                if (newValue.substring(0, 2) != searchString().substring(0, 2)) {
+            if (newValue.length > minLength - 1) {
+                var searchString = allBindings.searchString;
+                if (newValue.substring(0, minLength) != searchString().substring(0, minLength)) {
                     searchString(newValue);
                 }
             }

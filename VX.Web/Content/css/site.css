@@ -543,12 +543,13 @@ input.bankDetails {
 div.dialog-left-column {
     width: 200px; 
     float: left;
+    text-align: left;
 }
 
 div.dialog-middle-column {
     width: 50px;
     height: 50px;
-    margin-top: 50px;
+    margin-top: 90px;
     background: url(../Images/green-arrow.png) no-repeat left center;
     float: left;
 }
@@ -556,5 +557,16 @@ div.dialog-middle-column {
 div.dialog-right-column {
     width: 200px; 
     float: left;
+    text-align: left;
+}
+
+div.dialog-group {
+    border: 1px solid ActiveBorder;
+    padding: 5px;
+    text-align: left;
+}
+
+input.dialog-text-input {
+    width: 180px;
 }
 

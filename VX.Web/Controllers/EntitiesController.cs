@@ -18,6 +18,7 @@ namespace VX.Web.Controllers
         public ActionResult Banks()
         {
             ViewData["VocabExtServiceRest"] = SettingsReader.VocabExtServiceRest;
+            ViewData["VocabExtServiceHost"] = SettingsReader.VocabExtServiceHost;
             return View();
         }
     }
