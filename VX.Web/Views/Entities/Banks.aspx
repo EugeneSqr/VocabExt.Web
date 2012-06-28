@@ -32,15 +32,19 @@
                         <td data-bind="text: activeSource().Spelling" />
                         <td data-bind="text: activeTarget().Spelling" />
                         <td>
-                            <input type="button" data-bind="click: openEditDialog" value="Edit"/>
+                            <input type="button" data-bind="button: {
+                                    text: true, label: 'Edit'
+                                },
+                                click: openEditDialog" value="Edit"/>
                             <div data-bind="dialog: {
                                     autoOpen: false,
                                     draggable: false,
                                     resizable: false,
                                     modal: true,
                                     width: 480,
-                                    height: 275,
+                                    height: 285,
                                     title: 'Edit',
+                                    closeOnEscape: false,
                                     buttons: { 
                                         'Save': submitEditDialog, 
                                         'Cancel': cancelEditDialog
@@ -93,7 +97,14 @@
                                 <div class="clear" />
                             </div>
                         </td>
-                        <td><input type="button" value="Delete"/></td>
+                        <td>
+                            <div data-bind="confirmationDialog: { confirm: confirmDeletion, abort: abortDeletion }, 
+                                visible: deletionDialogVisible">
+                                Are you sure?
+                            </div>
+                            <input type="button" data-bind="button: { text: true, label: 'Delete' }, 
+                                click: openDeletionDialog"/>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -135,7 +146,7 @@
                         var translations = eval(translationsData);
                         bankDetailsModel.translations.removeAll();
                         for (index in translations) {
-                            bankDetailsModel.translations.push(new TranslationModel(translations[index]));
+                            bankDetailsModel.translations.push(new TranslationModel(translations[index], bankDetailsModel));
                         }
 
                         bankDetailsModel.translationsShown(true);
@@ -161,9 +172,10 @@
             });
         }
         
-        function TranslationModel(translationData) {
+        function TranslationModel(translationData, bankDetailsModel) {
             var self = this;
-
+            self.parent = bankDetailsModel;
+            
             self.__type = translationData.__type;
             self.Id = translationData.Id;
             self.originalSource = new WordModel(translationData.Source);
@@ -171,9 +183,15 @@
             self.activeSource = ko.observable(self.originalSource);
             self.activeTarget = ko.observable(self.originalTarget);
             self.editDialogVisible = ko.observable(false);
+            self.deletionDialogVisible = ko.observable(false);
+            
 
             self.openEditDialog = function () {
                 self.editDialogVisible(true);
+            };
+
+            self.openDeletionDialog = function () {
+                self.deletionDialogVisible(true);
             };
 
             self.submitEditDialog = function () {
@@ -189,19 +207,42 @@
                     url: banksListViewModel.updateTranslationUrl,
                     method: "POST",
                     data: ko.toJSON({ __type: self.__type, Id: self.Id, Source: self.activeSource, Target: self.activeTarget })
-                }, function () {
-                    console.log("done");
-                });
+                }, function (data) {
+                    if (data.status) {
+                        self.commitSelections();
+                        self.editDialogVisible(false);
+                        console.log("successfully udated");
 
-                self.originalSource = self.activeSource();
-                self.originalTarget = self.activeTarget();
-                self.editDialogVisible(false);
+                    } else {
+                        self.rollbackSelections();
+                        console.log("update failed, reason: " + data.errorMessage);
+                    }
+                });
             };
 
             self.cancelEditDialog = function () {
+                self.rollbackSelections();
+                self.editDialogVisible(false);
+            };
+
+            self.confirmDeletion = function () {
+                console.log("confirm deletion");
+                self.deletionDialogVisible(false);
+            };
+
+            self.abortDeletion = function () {
+                console.log(self.parent);
+                self.deletionDialogVisible(false);
+            };
+
+            self.commitSelections = function() {
+                self.originalSource = self.activeSource();
+                self.originalTarget = self.activeTarget();
+            };
+
+            self.rollbackSelections = function() {
                 self.activeSource(self.originalSource);
                 self.activeTarget(self.originalTarget);
-                self.editDialogVisible(false);
             };
 
             self.fillSourceFromAutocomplete = function (event, ui) {

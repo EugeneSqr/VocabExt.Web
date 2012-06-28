@@ -12,11 +12,12 @@
 ko.bindingHandlers.dialog = {
     init: function (element, parameters) {
         var options = ko.utils.unwrapObservable(parameters()) || {};
-        options.open = function() {
+        options.open = function () {
             $(this).parent().children().children('.ui-dialog-titlebar-close').hide();
         };
-        
-        $(element).dialog(options);
+        var $element = $(element);
+        $element.css({ overflow : 'hidden'});
+        $element.dialog(options);
     },
     update: function (element, valueAccessor, allBindingsAccessor) {
         var visible = ko.utils.unwrapObservable(allBindingsAccessor().visible);
@@ -24,12 +25,32 @@ ko.bindingHandlers.dialog = {
     }
 };
 
+ko.bindingHandlers.confirmationDialog = {
+    init: function (element, parameters) {
+        var options = {
+            open: function () { $(this).parent().children().children('.ui-dialog-titlebar-close').hide(); },
+            title: 'Confirm action',
+            closeOnEscape: false,
+            resizable: false,
+            draggable: false,
+            modal : true,
+            buttons: { "Yes": parameters().confirm, "No": parameters().abort }
+        };
+        $(element).dialog(options);
+    },
+
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        var visible = ko.utils.unwrapObservable(allBindingsAccessor().visible);
+        $(element).dialog(visible ? "open" : "close");
+    }
+};
+
 ko.bindingHandlers.autocomplete = {
-    init: function (element, parameters, allBindingsAccessor) {
+    init: function(element, parameters, allBindingsAccessor) {
         var $element = $(element);
         var allBindings = allBindingsAccessor();
         var minLength = allBindings.autocomplete.minLength;
-        $element.keyup(function () {
+        $element.keyup(function() {
             var newValue = $element.val();
             if (newValue.length > minLength - 1) {
                 var searchString = allBindings.searchString;
@@ -41,7 +62,15 @@ ko.bindingHandlers.autocomplete = {
 
         $element.autocomplete(parameters());
     },
-    update: function (element, parameters) {
+    update: function(element, parameters) {
         $(element).autocomplete(parameters());
     }
-}
+};
+
+ko.bindingHandlers.button = {
+    update: function (element, parameters, allBindingsAccessor) {
+        var $element = $(element);
+        $element.button(ko.utils.unwrapObservable(parameters()) || {});
+        $element.click = ko.utils.unwrapObservable(allBindingsAccessor().click);
+    }
+};
