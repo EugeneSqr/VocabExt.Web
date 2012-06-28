@@ -193,11 +193,12 @@
                     console.log("done");
                 });
 
+                self.originalSource = self.activeSource();
+                self.originalTarget = self.activeTarget();
                 self.editDialogVisible(false);
             };
 
             self.cancelEditDialog = function () {
-                console.log('restoring state');
                 self.activeSource(self.originalSource);
                 self.activeTarget(self.originalTarget);
                 self.editDialogVisible(false);
