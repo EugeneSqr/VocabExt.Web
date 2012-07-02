@@ -25,6 +25,63 @@
         <div data-bind="visible: loadingShown" align="center">
             <img style="background: transparent; border: 0px" src="/Content/Images/loader.gif" alt="loading"/>
         </div>
+        <div data-bind="editTranslationDialog: { autoOpen: false, draggable: false, resizable: false, modal: true, width: 480, height: 285,
+                title: 'Edit', closeOnEscape: false,
+                buttons: { 
+                    'Save': submitEditDialog, 
+                    'Cancel': cancelEditDialog
+                },
+                activeTranslation: activeTranslation
+            }, 
+            visible: editDialogVisible">
+                                
+	        <div class="dialog-left-column">
+	                                
+	            <div>Specify source:</div>
+                <input class="dialog-text-input" data-bind="autocomplete: { 
+                        source: banksListViewModel.sourceOptions(), 
+                        select: fillTranslationSourceFromAutocomplete,
+                        minLength: 2
+                    }, 
+                    searchString: banksListViewModel.sourceSearchString"/>
+                                    
+                <div>Active source:</div>
+                <div class="dialog-group">
+                    <div data-bind="with: activeTranslation">
+                        <div>Spelling</div>
+                        <input data-bind="value: activeSource().Spelling" class="dialog-text-input" type="text" disabled="disabled"></input>
+                        <div>Transcription</div>
+                        <input data-bind="value: activeSource().Transcription" class="dialog-text-input" type="text" disabled="disabled"></input>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dialog-middle-column"></div>
+                                
+            <div class="dialog-right-column">
+                <div>Specify target:</div>
+                <input class="dialog-text-input" data-bind="autocomplete: { 
+                        source: banksListViewModel.targetOptions(), 
+                        select: fillTranslationTargetFromAutocomplete,
+                        minLength: 2
+                    }, 
+                    searchString: banksListViewModel.targetSearchString"/>
+                <div>Active target:</div>
+                <div class="dialog-group">
+                    <div data-bind="with: activeTranslation">
+                        <div>Spelling</div>
+                        <input data-bind="value: activeTarget().Spelling" type="text" class="dialog-text-input" disabled="disabled"></input>
+                        <div>Transcription</div>
+                        <input data-bind="value: activeTarget().Transcription" type="text" class="dialog-text-input" disabled="disabled"></input>
+                    </div>
+                </div>
+            </div>
+            
+            <div data-bind="confirmationDialog: { confirm: confirmTranslationDelete, abort: abortTranslationDelete }, 
+                visible: deleteConfirmationDialogVisible">
+                Are you sure?
+            </div>
+        </div>
         <div data-bind="slideVisible : translationsShown">
             <table>
                 <tbody data-bind="foreach: translations">
@@ -36,74 +93,11 @@
                                     text: true, label: 'Edit'
                                 },
                                 click: openEditDialog" value="Edit"/>
-                            <div data-bind="dialog: {
-                                    autoOpen: false,
-                                    draggable: false,
-                                    resizable: false,
-                                    modal: true,
-                                    width: 480,
-                                    height: 285,
-                                    title: 'Edit',
-                                    closeOnEscape: false,
-                                    buttons: { 
-                                        'Save': submitEditDialog, 
-                                        'Cancel': cancelEditDialog
-                                    } 
-                                }, 
-                                visible: editDialogVisible">
-                                
-	                            <div class="dialog-left-column">
-	                                
-	                                <div>Specify source:</div>
-                                    <input class="dialog-text-input" data-bind="autocomplete: { 
-                                            source: banksListViewModel.sourceOptions(), 
-                                            select: fillSourceFromAutocomplete,
-                                            minLength: 2
-                                        }, 
-                                        searchString: banksListViewModel.sourceSearchString"/>
-                                    
-                                    <div>Active source:</div>
-                                    <div class="dialog-group">
-                                        <div data-bind="with: activeSource">
-                                            <div>Spelling</div>
-                                            <input data-bind="value: Spelling" class="dialog-text-input" type="text" disabled="disabled"></input>
-                                            <div>Transcription</div>
-                                            <input data-bind="value: Transcription" class="dialog-text-input" type="text" disabled="disabled"></input>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="dialog-middle-column"></div>
-                                
-                                <div class="dialog-right-column">
-                                    <div>Specify target:</div>
-                                    <input class="dialog-text-input" data-bind="autocomplete: { 
-                                            source: banksListViewModel.targetOptions(), 
-                                            select: fillTargetFromAutocomplete,
-                                            minLength: 2
-                                        }, 
-                                        searchString: banksListViewModel.targetSearchString"/>
-                                    <div>Active target:</div>
-                                    <div class="dialog-group">
-                                        <div data-bind="with: activeTarget">
-                                            <div>Spelling</div>
-                                            <input data-bind="value: Spelling" type="text" class="dialog-text-input" disabled="disabled"></input>
-                                            <div>Transcription</div>
-                                            <input data-bind="value: Transcription" type="text" class="dialog-text-input" disabled="disabled"></input>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="clear" />
-                            </div>
+                            
                         </td>
                         <td>
-                            <div data-bind="confirmationDialog: { confirm: confirmDeletion, abort: abortDeletion }, 
-                                visible: deletionDialogVisible">
-                                Are you sure?
-                            </div>
                             <input type="button" data-bind="button: { text: true, label: 'Delete' }, 
-                                click: openDeletionDialog"/>
+                                click: openDeleteDialog"/>
                         </td>
                     </tr>
                 </tbody>
@@ -148,7 +142,7 @@
                         for (index in translations) {
                             bankDetailsModel.translations.push(new TranslationModel(translations[index], bankDetailsModel));
                         }
-
+                        
                         bankDetailsModel.translationsShown(true);
                     },
                     error: function () {
@@ -170,28 +164,14 @@
             self.loadingShown = ko.computed(function() {
                 return !self.translationsShown();
             });
-        }
-        
-        function TranslationModel(translationData, bankDetailsModel) {
-            var self = this;
-            self.parent = bankDetailsModel;
-            
-            self.__type = translationData.__type;
-            self.Id = translationData.Id;
-            self.originalSource = new WordModel(translationData.Source);
-            self.originalTarget = new WordModel(translationData.Target);
-            self.activeSource = ko.observable(self.originalSource);
-            self.activeTarget = ko.observable(self.originalTarget);
+
+            // Edit translation dialog
             self.editDialogVisible = ko.observable(false);
-            self.deletionDialogVisible = ko.observable(false);
-            
+            self.activeTranslation = ko.observable();
 
-            self.openEditDialog = function () {
+            self.openEditTranslationDialog = function (translation) {
+                self.setActiveTranslation(translation);
                 self.editDialogVisible(true);
-            };
-
-            self.openDeletionDialog = function () {
-                self.deletionDialogVisible(true);
             };
 
             self.submitEditDialog = function () {
@@ -206,7 +186,12 @@
                 xhr.request({
                     url: banksListViewModel.updateTranslationUrl,
                     method: "POST",
-                    data: ko.toJSON({ __type: self.__type, Id: self.Id, Source: self.activeSource, Target: self.activeTarget })
+                    data: ko.toJSON({
+                        __type: self.activeTranslation().__type,
+                        Id: self.activeTranslation().Id,
+                        Source: self.activeTranslation().activeSource, 
+                        Target: self.activeTranslation().activeTarget
+                    })
                 }, function (data) {
                     if (data.status) {
                         self.commitSelections();
@@ -225,32 +210,18 @@
                 self.editDialogVisible(false);
             };
 
-            self.confirmDeletion = function () {
-                console.log("confirm deletion");
-                self.deletionDialogVisible(false);
+            self.fillTranslationSourceFromAutocomplete = function (event, ui) {
+                self.fillFromAutocomplete(
+                    banksListViewModel.sourceOptionsRaw,
+                    self.activeTranslation().activeSource, 
+                    ui.item.value);
             };
 
-            self.abortDeletion = function () {
-                console.log(self.parent);
-                self.deletionDialogVisible(false);
-            };
-
-            self.commitSelections = function() {
-                self.originalSource = self.activeSource();
-                self.originalTarget = self.activeTarget();
-            };
-
-            self.rollbackSelections = function() {
-                self.activeSource(self.originalSource);
-                self.activeTarget(self.originalTarget);
-            };
-
-            self.fillSourceFromAutocomplete = function (event, ui) {
-                self.fillFromAutocomplete(banksListViewModel.sourceOptionsRaw, self.activeSource, ui.item.value);
-            };
-
-            self.fillTargetFromAutocomplete = function (event, ui) {
-                self.fillFromAutocomplete(banksListViewModel.targetOptionsRaw, self.activeTarget, ui.item.value);
+            self.fillTranslationTargetFromAutocomplete = function (event, ui) {
+                self.fillFromAutocomplete(
+                    banksListViewModel.targetOptionsRaw,
+                    self.activeTranslation().activeTarget, 
+                    ui.item.value);
             };
 
             self.fillFromAutocomplete = function (source, target, selected) {
@@ -260,6 +231,61 @@
                         break;
                     }
                 }
+            };
+
+            self.commitSelections = function () {
+                self.activeTranslation().originalSource = self.activeTranslation().activeSource();
+                self.activeTranslation().originalTarget = self.activeTranslation().activeTarget();
+            };
+
+            self.rollbackSelections = function () {
+                self.activeTranslation().activeSource(self.activeTranslation().originalSource);
+                self.activeTranslation().activeTarget(self.activeTranslation().originalTarget);
+            };
+
+            // Delete translation confirmation dialog
+            self.deleteConfirmationDialogVisible = ko.observable(false);
+
+            self.openDeleteTranslationDialog = function (translation) {
+                self.setActiveTranslation(translation);
+                self.deleteConfirmationDialogVisible(true);
+            };
+
+            self.confirmTranslationDelete = function () {
+                console.log(self.activeTranslation());
+                console.log("confirmed");
+                self.deleteConfirmationDialogVisible(false);
+            };
+
+            self.abortTranslationDelete = function () {
+                console.log(self.activeTranslation());
+                console.log("aborted");
+                self.deleteConfirmationDialogVisible(false);
+            };
+
+            // Common
+            self.setActiveTranslation = function (translation) {
+                self.activeTranslation(translation);
+            };
+        }
+        
+        function TranslationModel(translationData, bankDetailsModel) {
+            var self = this;
+            self.parent = bankDetailsModel;
+            
+            self.__type = translationData.__type;
+            self.Id = translationData.Id;
+            self.originalSource = new WordModel(translationData.Source);
+            self.originalTarget = new WordModel(translationData.Target);
+            self.activeSource = ko.observable(self.originalSource);
+            self.activeTarget = ko.observable(self.originalTarget);
+
+            self.openEditDialog = function () {
+                self.parent.openEditTranslationDialog(self);
+            };
+
+            self.openDeleteDialog = function () {
+                self.parent.openDeleteTranslationDialog(self);
             };
         }
         

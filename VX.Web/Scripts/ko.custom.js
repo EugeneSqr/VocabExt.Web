@@ -9,14 +9,14 @@
     }
 };
 
-ko.bindingHandlers.dialog = {
+ko.bindingHandlers.editTranslationDialog = {
     init: function (element, parameters) {
         var options = ko.utils.unwrapObservable(parameters()) || {};
         options.open = function () {
             $(this).parent().children().children('.ui-dialog-titlebar-close').hide();
         };
         var $element = $(element);
-        $element.css({ overflow : 'hidden'});
+        $element.css({ overflow: 'hidden' });
         $element.dialog(options);
     },
     update: function (element, valueAccessor, allBindingsAccessor) {
