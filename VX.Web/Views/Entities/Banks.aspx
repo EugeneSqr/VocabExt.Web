@@ -96,7 +96,7 @@
             
             <div data-bind="confirmationDialog: { confirm: confirmTranslationDelete, abort: abortTranslationDelete }, 
                 visible: deleteConfirmationDialogVisible">
-                Are you sure?
+                Are you sure you want to delete this translation?
             </div>
         </div>
         <div data-bind="slideVisible : translationsShown">
@@ -105,16 +105,14 @@
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
                         <td data-bind="text: activeSource().Spelling" />
                         <td data-bind="text: activeTarget().Spelling" />
-                        <td width="30">
+                        <td width="65">
                             <button class="translation-button" data-bind="button: {
                                     text: true, 
                                     label: '&nbsp;',
-                                    icons: { primary: 'ui-icon-pencil' }
+                                    icons: { primary: 'ui-icon-gear' }
                                 },
-                                click: openEditDialog"></button>
+                                click: openEditDialog" />
                             
-                        </td>
-                        <td width="30">
                             <button class="translation-button" data-bind="button: { 
                                     text: true, 
                                     label: '&nbsp;',
@@ -142,6 +140,7 @@
             self.getBanksListUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetVocabBanksList';
             self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetTranslations';
             self.updateTranslationUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'UpdateTranslation';
+            self.detachTranslationUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'DetachTranslation';
             self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetWords';
             self.vocabServiceHost = '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html';
 
@@ -212,11 +211,11 @@
                     data: ko.toJSON({
                         __type: self.activeTranslation().__type,
                         Id: self.activeTranslation().Id,
-                        Source: self.activeTranslation().activeSource, 
+                        Source: self.activeTranslation().activeSource,
                         Target: self.activeTranslation().activeTarget
                     })
-                }, function (data) {
-                    if (data.status) {
+                }, function (response) {
+                    if (JSON.parse(response.data).Status) {
                         self.commitSelections();
                         self.editDialogVisible(false);
                         console.log("successfully udated");
@@ -275,14 +274,35 @@
             };
 
             self.confirmTranslationDelete = function () {
-                console.log(self.activeTranslation());
-                console.log("confirmed");
+                var xhr = new easyXDM.Rpc({
+                    remote: banksListViewModel.vocabServiceHost
+                }, {
+                    remote: {
+                        request: {}
+                    }
+                });
+
+                xhr.request({
+                    url: banksListViewModel.detachTranslationUrl,
+                    method: "POST",
+                    data: JSON.stringify({
+                        vocabbank: self.id,
+                        translation: self.activeTranslation().Id
+                    })
+                }, 
+                function (response) {
+                    if (JSON.parse(response.data).Status) {
+                        self.translations.remove(function (item) {
+                            return item.Id == self.activeTranslation().Id;
+                        });
+                        console.log('successfully deleted');
+                    }
+                });
+
                 self.deleteConfirmationDialogVisible(false);
             };
 
             self.abortTranslationDelete = function () {
-                console.log(self.activeTranslation());
-                console.log("aborted");
                 self.deleteConfirmationDialogVisible(false);
             };
 
