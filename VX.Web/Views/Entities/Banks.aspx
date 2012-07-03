@@ -16,6 +16,23 @@
             </div>
         </div>
     </div>
+    <div id="controlPanel">
+        <button class="banksControlButton" data-bind="button: { 
+                                    text: true, 
+                                    label: 'Create bank',
+                                    icons: { primary: 'ui-icon-circle-plus' }
+                                }"/>
+        <button class="banksControlButton" data-bind="button: { 
+                                    text: true, 
+                                    label: 'Delete bank',
+                                    icons: { primary: 'ui-icon-trash' }
+                                }"/>
+        <button class="banksControlButton" data-bind="button: { 
+                                    text: true, 
+                                    label: 'Add translation',
+                                    icons: { primary: 'ui-icon-plus' }
+                                }"/>
+    </div>
     <div id="rightPanel" data-bind="with: activeBank">
         Name: <br/>
         <input class="bankDetails" type="text" data-bind="value: bankName"/><br/>
@@ -88,15 +105,21 @@
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
                         <td data-bind="text: activeSource().Spelling" />
                         <td data-bind="text: activeTarget().Spelling" />
-                        <td>
-                            <input type="button" data-bind="button: {
-                                    text: true, label: 'Edit'
+                        <td width="30">
+                            <button class="translation-button" data-bind="button: {
+                                    text: true, 
+                                    label: '&nbsp;',
+                                    icons: { primary: 'ui-icon-pencil' }
                                 },
-                                click: openEditDialog" value="Edit"/>
+                                click: openEditDialog"></button>
                             
                         </td>
-                        <td>
-                            <input type="button" data-bind="button: { text: true, label: 'Delete' }, 
+                        <td width="30">
+                            <button class="translation-button" data-bind="button: { 
+                                    text: true, 
+                                    label: '&nbsp;',
+                                    icons: { primary: 'ui-icon-trash' }
+                                }, 
                                 click: openDeleteDialog"/>
                         </td>
                     </tr>
