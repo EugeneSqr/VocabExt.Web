@@ -286,8 +286,8 @@
                     url: banksListViewModel.detachTranslationUrl,
                     method: "POST",
                     data: JSON.stringify({
-                        vocabbank: self.id,
-                        translation: self.activeTranslation().Id
+                        parent: self.id,
+                        child: self.activeTranslation().Id
                     })
                 }, 
                 function (response) {
