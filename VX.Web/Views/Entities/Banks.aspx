@@ -16,7 +16,8 @@
             </div>
         </div>
     </div>
-    <div id="controlPanel">
+    <div data-bind="with: activeBank">
+        <div id="controlPanel">
         <button class="banksControlButton" data-bind="button: { 
                                     text: true, 
                                     label: 'Create bank',
@@ -31,9 +32,9 @@
                                     text: true, 
                                     label: 'Add translation',
                                     icons: { primary: 'ui-icon-plus' }
-                                }"/>
+                                }, click: attachTranslation"/>
     </div>
-    <div id="rightPanel" data-bind="with: activeBank">
+        <div id="rightPanel">
         Name: <br/>
         <input class="bankDetails" type="text" data-bind="value: bankName"/><br/>
         Description: <br/>
@@ -50,7 +51,7 @@
                 },
                 activeTranslation: activeTranslation
             }, 
-            visible: editDialogVisible">
+            visible: saveTranslationDialogVisible">
                                 
 	        <div class="dialog-left-column">
 	                                
@@ -59,8 +60,8 @@
                         source: banksListViewModel.sourceOptions(), 
                         select: fillTranslationSourceFromAutocomplete,
                         minLength: 2
-                    }, 
-                    searchString: banksListViewModel.sourceSearchString"/>
+                    },
+                    value: banksListViewModel.sourceSearchString"/>
                                     
                 <div>Active source:</div>
                 <div class="dialog-group">
@@ -81,8 +82,8 @@
                         source: banksListViewModel.targetOptions(), 
                         select: fillTranslationTargetFromAutocomplete,
                         minLength: 2
-                    }, 
-                    searchString: banksListViewModel.targetSearchString"/>
+                    },
+                    value: banksListViewModel.targetSearchString"/>
                 <div>Active target:</div>
                 <div class="dialog-group">
                     <div data-bind="with: activeTranslation">
@@ -125,6 +126,7 @@
             </table>
         </div>
     </div>
+    </div>
     <div class="clear"></div>
     <script type="text/javascript">
         function BanksListModel() {
@@ -139,7 +141,7 @@
             self.activeBank = ko.observable();
             self.getBanksListUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetVocabBanksList';
             self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetTranslations';
-            self.updateTranslationUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'UpdateTranslation';
+            self.saveTranslationUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'SaveTranslation';
             self.detachTranslationUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'DetachTranslation';
             self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetWords';
             self.vocabServiceHost = '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html';
@@ -187,13 +189,18 @@
                 return !self.translationsShown();
             });
 
-            // Edit translation dialog
-            self.editDialogVisible = ko.observable(false);
+            // Save translation
+            self.saveTranslationDialogVisible = ko.observable(false);
             self.activeTranslation = ko.observable();
 
-            self.openEditTranslationDialog = function (translation) {
+            self.editTranslation = function (translation) {
                 self.setActiveTranslation(translation);
-                self.editDialogVisible(true);
+                self.saveTranslationDialogVisible(true);
+            };
+
+            self.attachTranslation = function () {
+                self.setActiveTranslation(new TranslationModel(null, self));
+                self.saveTranslationDialogVisible(true);
             };
 
             self.submitEditDialog = function () {
@@ -206,7 +213,7 @@
                 });
 
                 xhr.request({
-                    url: banksListViewModel.updateTranslationUrl,
+                    url: banksListViewModel.saveTranslationUrl,
                     method: "POST",
                     data: ko.toJSON({
                         __type: self.activeTranslation().__type,
@@ -217,7 +224,7 @@
                 }, function (response) {
                     if (JSON.parse(response.data).Status) {
                         self.commitSelections();
-                        self.editDialogVisible(false);
+                        self.saveTranslationDialogVisible(false);
                         console.log("successfully udated");
 
                     } else {
@@ -229,7 +236,7 @@
 
             self.cancelEditDialog = function () {
                 self.rollbackSelections();
-                self.editDialogVisible(false);
+                self.saveTranslationDialogVisible(false);
             };
 
             self.fillTranslationSourceFromAutocomplete = function (event, ui) {
@@ -263,12 +270,14 @@
             self.rollbackSelections = function () {
                 self.activeTranslation().activeSource(self.activeTranslation().originalSource);
                 self.activeTranslation().activeTarget(self.activeTranslation().originalTarget);
+                banksListViewModel.sourceSearchString("");
+                banksListViewModel.targetSearchString("");
             };
 
             // Delete translation confirmation dialog
             self.deleteConfirmationDialogVisible = ko.observable(false);
 
-            self.openDeleteTranslationDialog = function (translation) {
+            self.deleteTranslation = function (translation) {
                 self.setActiveTranslation(translation);
                 self.deleteConfirmationDialogVisible(true);
             };
@@ -314,32 +323,50 @@
         
         function TranslationModel(translationData, bankDetailsModel) {
             var self = this;
+            self.defaultType = "TranslationContract:#VX.Domain.DataContracts";
             self.parent = bankDetailsModel;
             
-            self.__type = translationData.__type;
-            self.Id = translationData.Id;
-            self.originalSource = new WordModel(translationData.Source);
-            self.originalTarget = new WordModel(translationData.Target);
+            if (translationData) {
+                self.__type = translationData.__type;
+                self.Id = translationData.Id;
+                self.originalSource = new WordModel(translationData.Source);
+                self.originalTarget = new WordModel(translationData.Target);
+            } else {
+                console.log('checking original');
+                self.__type = self.defaultType;
+                self.Id = -1;
+                self.originalSource = new WordModel(null);
+                self.originalTarget = new WordModel(null);
+            }
+            
             self.activeSource = ko.observable(self.originalSource);
             self.activeTarget = ko.observable(self.originalTarget);
 
             self.openEditDialog = function () {
-                self.parent.openEditTranslationDialog(self);
+                self.parent.editTranslation(self);
             };
 
             self.openDeleteDialog = function () {
-                self.parent.openDeleteTranslationDialog(self);
+                self.parent.deleteTranslation(self);
             };
         }
         
         function WordModel(wordData) {
             var self = this;
+            self.defaultType = "WordContract:#VX.Domain.DataContracts";
 
-            self.__type = wordData.__type;
-            self.Id = wordData.Id;
-            self.Language = new LanguageModel(wordData.Language);
-            self.Spelling = ko.observable(wordData.Spelling);
-            self.Transcription = ko.observable(wordData.Transcription);
+            if (wordData) {
+                self.__type = wordData.__type;
+                self.Id = wordData.Id;
+                self.Language = new LanguageModel(wordData.Language);
+                self.Spelling = ko.observable(wordData.Spelling);
+                self.Transcription = ko.observable(wordData.Transcription);
+            } else {
+                self.__type = self.defaultType;
+                self.Id = -1;
+                self.Spelling = ko.observable();
+                self.Transcription = ko.observable();
+            }
         }
         
         function LanguageModel(languageData) {

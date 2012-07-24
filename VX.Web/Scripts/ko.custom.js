@@ -46,23 +46,23 @@ ko.bindingHandlers.confirmationDialog = {
 };
 
 ko.bindingHandlers.autocomplete = {
-    init: function(element, parameters, allBindingsAccessor) {
+    init: function (element, parameters, allBindingsAccessor) {
         var $element = $(element);
         var allBindings = allBindingsAccessor();
         var minLength = allBindings.autocomplete.minLength;
-        $element.keyup(function() {
+        $element.keyup(function () {
             var newValue = $element.val();
             if (newValue.length > minLength - 1) {
-                var searchString = allBindings.searchString;
-                if (newValue.substring(0, minLength) != searchString().substring(0, minLength)) {
-                    searchString(newValue);
+                var value = allBindings.value;
+                if (newValue.substring(0, minLength) != value().substring(0, minLength)) {
+                    value(newValue);
                 }
             }
         });
 
         $element.autocomplete(parameters());
     },
-    update: function(element, parameters) {
+    update: function (element, parameters) {
         $(element).autocomplete(parameters());
     }
 };
