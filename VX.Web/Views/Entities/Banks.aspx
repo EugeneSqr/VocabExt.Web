@@ -216,10 +216,12 @@
                     url: banksListViewModel.saveTranslationUrl,
                     method: "POST",
                     data: ko.toJSON({
-                        __type: self.activeTranslation().__type,
-                        Id: self.activeTranslation().Id,
-                        Source: self.activeTranslation().activeSource,
-                        Target: self.activeTranslation().activeTarget
+                        VocabBankId: self.id,
+                        Translation: {
+                            Id: self.activeTranslation().Id,
+                            Source: self.activeTranslation().activeSource,
+                            Target: self.activeTranslation().activeTarget
+                        }
                     })
                 }, function (response) {
                     if (JSON.parse(response.data).Status) {
@@ -323,17 +325,15 @@
         
         function TranslationModel(translationData, bankDetailsModel) {
             var self = this;
-            self.defaultType = "TranslationContract:#VX.Domain.DataContracts";
             self.parent = bankDetailsModel;
             
             if (translationData) {
-                self.__type = translationData.__type;
+                /*self.__type = translationData.__type;*/
                 self.Id = translationData.Id;
                 self.originalSource = new WordModel(translationData.Source);
                 self.originalTarget = new WordModel(translationData.Target);
             } else {
-                console.log('checking original');
-                self.__type = self.defaultType;
+                /*self.__type = "TranslationContract:#VX.Domain.DataContracts";*/
                 self.Id = -1;
                 self.originalSource = new WordModel(null);
                 self.originalTarget = new WordModel(null);
@@ -353,16 +353,15 @@
         
         function WordModel(wordData) {
             var self = this;
-            self.defaultType = "WordContract:#VX.Domain.DataContracts";
 
             if (wordData) {
-                self.__type = wordData.__type;
+                /*self.__type = wordData.__type;*/
                 self.Id = wordData.Id;
                 self.Language = new LanguageModel(wordData.Language);
                 self.Spelling = ko.observable(wordData.Spelling);
                 self.Transcription = ko.observable(wordData.Transcription);
             } else {
-                self.__type = self.defaultType;
+                /*self.__type = "WordContract:#VX.Domain.DataContracts";*/
                 self.Id = -1;
                 self.Spelling = ko.observable();
                 self.Transcription = ko.observable();
@@ -372,7 +371,7 @@
         function LanguageModel(languageData) {
             var self = this;
 
-            self.__type = languageData.__type;
+            /*self.__type = languageData.__type;*/
             self.Id = languageData.Id;
             self.Name = languageData.Name;
             self.Abbreviation = languageData.Abbreviation;
