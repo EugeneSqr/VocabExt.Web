@@ -224,11 +224,16 @@
                         }
                     })
                 }, function (response) {
-                    if (JSON.parse(response.data).Status) {
-                        self.commitSelections();
+                    var responseData = JSON.parse(response.data);
+                    if (responseData.Status) {
+                        console.log(responseData);
+                        if (responseData.OperationActionCode == 0) {
+                            self.commitSelections();
+                        }
+                        if (responseData.OperationActionCode == 1) {
+                            self.translations.push(self.activeTranslation);
+                        }
                         self.saveTranslationDialogVisible(false);
-                        console.log("successfully udated");
-
                     } else {
                         self.rollbackSelections();
                         console.log("update failed, reason: " + data.errorMessage);
@@ -306,7 +311,6 @@
                         self.translations.remove(function (item) {
                             return item.Id == self.activeTranslation().Id;
                         });
-                        console.log('successfully deleted');
                     }
                 });
 
