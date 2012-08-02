@@ -33,6 +33,11 @@
                                     label: 'Add translation',
                                     icons: { primary: 'ui-icon-plus' }
                                 }, click: attachTranslation"/>
+        <button class="banksControlButton" data-bind="button: { 
+                                    text: true, 
+                                    label: 'Apply changes',
+                                    icons: { primary: 'ui-icon-check' }
+                                }, click: updateHeaders"/>
     </div>
         <div id="rightPanel">
         Name: <br/>
@@ -144,6 +149,7 @@
             self.saveTranslationUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'SaveTranslation';
             self.detachTranslationUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'DetachTranslation';
             self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetWords';
+            self.updateHeaders = '<%:ViewData["VocabExtServiceRest"]%>' + 'UpdateBankHeaders';
             self.vocabServiceHost = '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html';
 
             self.sourceOptions = ko.observableArray();
@@ -319,6 +325,35 @@
 
             self.abortTranslationDelete = function () {
                 self.deleteConfirmationDialogVisible(false);
+            };
+
+            // Update headers
+            self.updateHeaders = function() {
+                var xhr = new easyXDM.Rpc({
+                    remote: banksListViewModel.vocabServiceHost
+                }, {
+                    remote: {
+                        request: {}
+                    }
+                });
+
+                xhr.request({
+                    url: banksListViewModel.updateHeaders,
+                    method: "POST",
+                    data: ko.toJSON({
+                        VocabBankId: self.id,
+                        Name: self.bankName,
+                        Description: self.bankDescription
+                    })
+                }, function (response) {
+                    var responseData = JSON.parse(response.data);
+                    if (responseData.Status) {
+                        console.log(responseData);
+                    } else {
+                        self.rollbackSelections();
+                        console.log("update failed, reason: " + data.errorMessage);
+                    }
+                });
             };
 
             // Common
