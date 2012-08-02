@@ -186,7 +186,7 @@
             var self = this;
 
             self.id = bankData.Id;
-            self.bankName = bankData.Name;
+            self.bankName = ko.observable(bankData.Name);
             self.bankDescription = bankData.Description;
             self.translationsShown = ko.observable(false);
             self.translations = ko.observableArray();
