@@ -17,6 +17,7 @@
     <script src="/Scripts/knockout-2.1.0.js" type="text/javascript"></script>
     <script src="/Scripts/knockout.mapping-latest.js" type="text/javascript"></script>
     <script src="/Scripts/ko.custom.js" type="text/javascript"></script>
+    <script src="/Scripts/ko.models.js" type="text/javascript"></script>
     <script src="/Scripts/easyXDM.min.js" type="text/javascript"></script>
     <%--<script src="/Scripts/easyXDM.debug.js" type="text/javascript"></script>--%>
 </head>

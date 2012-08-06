@@ -8,5 +8,6 @@
     <h1>Available<span class="white"> entities</span></h1>
     <ul>
         <li><%: Html.ActionLink("Vocabulary banks", "banks", "Entities") %></li>
+        <li><%: Html.ActionLink("Words", "words", "Entities") %></li>
     </ul>
 </asp:Content>

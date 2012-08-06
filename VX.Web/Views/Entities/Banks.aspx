@@ -422,12 +422,10 @@
             self.parent = bankDetailsModel;
             
             if (translationData) {
-                /*self.__type = translationData.__type;*/
                 self.Id = translationData.Id;
                 self.originalSource = new WordModel(translationData.Source);
                 self.originalTarget = new WordModel(translationData.Target);
             } else {
-                /*self.__type = "TranslationContract:#VX.Domain.DataContracts";*/
                 self.Id = -1;
                 self.originalSource = new WordModel(null);
                 self.originalTarget = new WordModel(null);
@@ -443,32 +441,6 @@
             self.openDeleteDialog = function () {
                 self.parent.deleteTranslation(self);
             };
-        }
-        
-        function WordModel(wordData) {
-            var self = this;
-
-            if (wordData) {
-                /*self.__type = wordData.__type;*/
-                self.Id = wordData.Id;
-                self.Language = new LanguageModel(wordData.Language);
-                self.Spelling = ko.observable(wordData.Spelling);
-                self.Transcription = ko.observable(wordData.Transcription);
-            } else {
-                /*self.__type = "WordContract:#VX.Domain.DataContracts";*/
-                self.Id = -1;
-                self.Spelling = ko.observable();
-                self.Transcription = ko.observable();
-            }
-        }
-        
-        function LanguageModel(languageData) {
-            var self = this;
-
-            /*self.__type = languageData.__type;*/
-            self.Id = languageData.Id;
-            self.Name = languageData.Name;
-            self.Abbreviation = languageData.Abbreviation;
         }
 
         var banksListViewModel = new BanksListModel();
