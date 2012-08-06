@@ -11,44 +11,49 @@
             <img style="background: transparent; border: 0px" src="/Content/Images/loader.gif" alt="loading"/>
         </div>
         <div data-bind="slideVisible : showContent">
-            <div data-bind="foreach: vocabularies">
+            <div class="controlButtonsWrapper">
+                <button class="banksControlButton" data-bind="button: { 
+                                            text: true, 
+                                            label: 'Delete',
+                                            icons: { primary: 'ui-icon-trash' }
+                                        }, click: deleteBank"/>
+                <button class="banksControlButton" data-bind="button: { 
+                                            text: true, 
+                                            label: 'Create',
+                                            icons: { primary: 'ui-icon-circle-plus' }
+                                        }, click: createNewBank"/>
+            </div>
+                                    
+            <div data-bind="foreach: banksListViewModel.vocabularies">
                 <div class="banksList" data-bind="text: bankName, click: $parent.displayDetails"></div>
             </div>
+            
+            
         </div>
     </div>
     <div data-bind="with: activeBank">
-        <div id="controlPanel">
-        <button class="banksControlButton" data-bind="button: { 
-                                    text: true, 
-                                    label: 'Create bank',
-                                    icons: { primary: 'ui-icon-circle-plus' }
-                                }"/>
-        <button class="banksControlButton" data-bind="button: { 
-                                    text: true, 
-                                    label: 'Delete bank',
-                                    icons: { primary: 'ui-icon-trash' }
-                                }"/>
-        <button class="banksControlButton" data-bind="button: { 
-                                    text: true, 
-                                    label: 'Add translation',
-                                    icons: { primary: 'ui-icon-plus' }
-                                }, click: attachTranslation"/>
-        <button class="banksControlButton" data-bind="button: { 
-                                    text: true, 
-                                    label: 'Apply changes',
-                                    icons: { primary: 'ui-icon-check' }
-                                }, click: updateHeaders"/>
-    </div>
         <div id="rightPanel">
-        Name: <br/>
-        <input class="bankDetails" type="text" data-bind="value: bankName"/><br/>
-        Description: <br/>
-        <textarea cols="200" rows="3" data-bind="value: bankDescription" ></textarea><br/>
-        Translations: <br/>
-        <div data-bind="visible: loadingShown" align="center">
-            <img style="background: transparent; border: 0px" src="/Content/Images/loader.gif" alt="loading"/>
-        </div>
-        <div data-bind="editTranslationDialog: { autoOpen: false, draggable: false, resizable: false, modal: true, width: 480, height: 285,
+            <div class="controlButtonsWrapper">
+                <button class="banksControlButton" data-bind="button: { 
+                                            text: true, 
+                                            label: 'Add translation',
+                                            icons: { primary: 'ui-icon-plus' }
+                                        }, click: attachTranslation"/>
+                <button class="banksControlButton" data-bind="button: { 
+                                            text: true, 
+                                            label: 'Apply changes',
+                                            icons: { primary: 'ui-icon-check' }
+                                        }, click: updateHeaders"/>
+            </div>
+            Name: <br/>
+            <input class="bankDetails" type="text" data-bind="value: bankName"/><br/>
+            Description: <br/>
+            <textarea cols="200" rows="3" data-bind="value: bankDescription" ></textarea><br/>
+            Translations: <br/>
+            <div data-bind="visible: loadingShown" align="center">
+                <img style="background: transparent; border: 0px" src="/Content/Images/loader.gif" alt="loading"/>
+            </div>
+            <div data-bind="editTranslationDialog: { autoOpen: false, draggable: false, resizable: false, modal: true, width: 480, height: 285,
                 title: 'Edit', closeOnEscape: false,
                 buttons: { 
                     'Save': submitEditDialog, 
@@ -105,7 +110,7 @@
                 Are you sure you want to delete this translation?
             </div>
         </div>
-        <div data-bind="slideVisible : translationsShown">
+            <div data-bind="slideVisible : translationsShown">
             <table>
                 <tbody data-bind="foreach: translations">
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
@@ -130,7 +135,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        </div>
     </div>
     <div class="clear"></div>
     <script type="text/javascript">
@@ -141,15 +146,18 @@
             self.showContent = ko.computed(function() {
                 return !self.showLoading();
             });
-            
+
+            self.vocabExtServiceRest = '<%:ViewData["VocabExtServiceRest"]%>';
             self.vocabularies = ko.observableArray();
             self.activeBank = ko.observable();
-            self.getBanksListUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetVocabBanksList';
-            self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetTranslations';
-            self.saveTranslationUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'SaveTranslation';
-            self.detachTranslationUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'DetachTranslation';
-            self.getWordsUrl = '<%:ViewData["VocabExtServiceRest"]%>' + 'GetWords';
-            self.updateHeaders = '<%:ViewData["VocabExtServiceRest"]%>' + 'UpdateBankHeaders';
+            self.getBanksListUrl = self.vocabExtServiceRest + 'GetVocabBanksList';
+            self.getTranslationsUrl = self.vocabExtServiceRest + 'GetTranslations';
+            self.saveTranslationUrl = self.vocabExtServiceRest + 'SaveTranslation';
+            self.detachTranslationUrl = self.vocabExtServiceRest + 'DetachTranslation';
+            self.getWordsUrl = self.vocabExtServiceRest + 'GetWords';
+            self.updateHeadersUrl = self.vocabExtServiceRest + 'UpdateBankHeaders';
+            self.createNewBankUrl = self.vocabExtServiceRest + 'CreateNewVocabularyBank';
+            self.deleteVocabularyBankUrl = self.vocabExtServiceRest + 'DeleteVocabularyBank';
             self.vocabServiceHost = '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html';
 
             self.sourceOptions = ko.observableArray();
@@ -160,25 +168,73 @@
             self.sourceSearchString = ko.observable("");
             self.targetSearchString = ko.observable("");
 
+            self.checkId = function (entity) {
+                return (typeof entity != 'undefined' && entity.hasOwnProperty("id") && entity.id > 0);
+            };
+
             self.displayDetails = function (bankDetailsModel) {
-                self.activeBank(bankDetailsModel);
-                $.ajax({
-                    url: self.getTranslationsUrl + '/' + bankDetailsModel.id,
-                    dataType: 'jsonp',
-                    jsonpCallback: "Translations",
-                    success: function (translationsData) {
-                        var translations = eval(translationsData);
-                        bankDetailsModel.translations.removeAll();
-                        for (index in translations) {
-                            bankDetailsModel.translations.push(new TranslationModel(translations[index], bankDetailsModel));
+                if (self.checkId(bankDetailsModel)) {
+                    self.activeBank(bankDetailsModel);
+                    $.ajax({
+                        url: self.getTranslationsUrl + '/' + bankDetailsModel.id,
+                        dataType: 'jsonp',
+                        jsonpCallback: "Translations",
+                        success: function(translationsData) {
+                            var translations = eval(translationsData);
+                            bankDetailsModel.translations.removeAll();
+                            for (index in translations) {
+                                bankDetailsModel.translations.push(new TranslationModel(translations[index], bankDetailsModel));
+                            }
+
+                            bankDetailsModel.translationsShown(true);
+                        },
+                        error: function() {
+                            bankDetailsModel.translationsShown(true);
                         }
-                        
-                        bankDetailsModel.translationsShown(true);
+                    });
+                }
+            };
+
+            self.createNewBank = function () {
+                $.ajax({
+                    url: self.createNewBankUrl,
+                    dataType: 'jsonp',
+                    jsonpCallback: "NewVocabBank",
+                    success: function (vocabBankData) {
+                        var newVocabBank = new BankDetailsModel(vocabBankData);
+                        self.vocabularies.push(newVocabBank);
+                        self.displayDetails(newVocabBank);
                     },
                     error: function () {
-                        bankDetailsModel.translationsShown(true);
+                        console.log('error creating new bank');
                     }
                 });
+            };
+
+            self.deleteBank = function () {
+                $.ajax({
+                    url: self.deleteVocabularyBankUrl + '/' + self.activeBank().id,
+                    dataType: 'jsonp',
+                    jsonpCallback: "DeletedBank",
+                    success: function (response) {
+                        if (response.Status) {
+                            self.vocabularies.remove(function (item) {
+                                return item.id == response.StatusMessage;
+                            });
+                            if (self.vocabularies().length > 0) {
+                                self.displayDetails(self.vocabularies()[0]);
+                            } else {
+                                self.displayDetails({});
+                            }
+                        } else {
+                            console.log("error creating new bank, reason: " + response.errorMessage);
+                        }
+
+                    },
+                    error: function () {
+                        console.log('error creating new bank');
+                    }
+                }); ;
             };
         }
 
@@ -232,7 +288,6 @@
                 }, function (response) {
                     var responseData = JSON.parse(response.data);
                     if (responseData.Status) {
-                        console.log(responseData);
                         if (responseData.OperationActionCode == 0) {
                             self.commitSelections();
                         }
@@ -338,7 +393,7 @@
                 });
 
                 xhr.request({
-                    url: banksListViewModel.updateHeaders,
+                    url: banksListViewModel.updateHeadersUrl,
                     method: "POST",
                     data: ko.toJSON({
                         VocabBankId: self.id,
@@ -348,7 +403,7 @@
                 }, function (response) {
                     var responseData = JSON.parse(response.data);
                     if (responseData.Status) {
-                        console.log(responseData);
+                        
                     } else {
                         self.rollbackSelections();
                         console.log("update failed, reason: " + data.errorMessage);

@@ -477,17 +477,6 @@ can turn it into a fixed width layout by setting a pixel value to the width (e.g
     padding: 10px;
 }
 
-#controlPanel 
-{    
-    margin-left: 330px;
-    overflow: hidden;
-    border: 1px solid #0065C6;
-    background-color: #1E89DC;
-    padding: 10px;
-    margin-bottom: 7px;
-    text-align: right;
-}
-
 /* alignment classes */
 .float-left  { float: left; }
 .float-right { float: right; }
@@ -575,6 +564,11 @@ div.dialog-group {
     border: 1px solid ActiveBorder;
     padding: 5px;
     text-align: left;
+}
+
+div.controlButtonsWrapper {
+    text-align: right;
+    padding: 0px 5px 5px 0px;
 }
 
 input.dialog-text-input {
