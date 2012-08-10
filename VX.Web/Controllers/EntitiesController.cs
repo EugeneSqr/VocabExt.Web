@@ -25,6 +25,7 @@ namespace VX.Web.Controllers
         public ActionResult Words()
         {
             ViewData["VocabExtServiceRest"] = SettingsReader.VocabExtServiceRest;
+            ViewData["VocabExtServiceHost"] = SettingsReader.VocabExtServiceHost;
             return View();
         }
     }

@@ -53,9 +53,9 @@ ko.bindingHandlers.autocomplete = {
         $element.keyup(function () {
             var newValue = $element.val();
             if (newValue.length > minLength - 1) {
-                var value = allBindings.value;
-                if (newValue.substring(0, minLength) != value().substring(0, minLength)) {
-                    value(newValue);
+                var searchString = allBindings.searchString;
+                if (newValue.substring(0, minLength) != searchString().substring(0, minLength)) {
+                    searchString(newValue);
                 }
             }
         });

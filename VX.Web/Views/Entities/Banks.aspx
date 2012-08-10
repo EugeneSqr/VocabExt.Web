@@ -71,7 +71,7 @@
                         select: fillTranslationSourceFromAutocomplete,
                         minLength: 2
                     },
-                    value: banksListViewModel.sourceSearchString"/>
+                    searchString: banksListViewModel.sourceSearchString"/>
                                     
                 <div>Active source:</div>
                 <div class="dialog-group">
@@ -93,7 +93,7 @@
                         select: fillTranslationTargetFromAutocomplete,
                         minLength: 2
                     },
-                    value: banksListViewModel.targetSearchString"/>
+                    searchString: banksListViewModel.targetSearchString"/>
                 <div>Active target:</div>
                 <div class="dialog-group">
                     <div data-bind="with: activeTranslation">
