@@ -576,15 +576,39 @@ div.controlButtonsWrapper {
     padding: 0px 5px 5px 0px;
 }
 
+div.correctHighlight {
+    color: #B1E100;
+}
+
+div.incorrectHighlight {
+    color: red;
+}
+div.wordBox {
+    width: 147px;
+    padding: 5px;
+}
+
+div.wordBoxCorrect {
+    width: 147px;
+    padding: 5px;
+    border: 3px solid #B1E100;    
+}
+
+div.wordBoxIncorrect {
+    width: 147px;
+    padding: 5px;
+    border: 3px solid red;
+}
+
 input.dialog-text-input {
     width: 180px;
 }
 
-button.translation-button {
-    width: 31px;
+button.imageonly-button {
+    width: 32px;
 }
 
-button.banksControlButton {
+button.control-button {
     margin-left: 7px;
 }
 

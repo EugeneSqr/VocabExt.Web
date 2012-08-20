@@ -10,11 +10,13 @@ namespace VX.Web.Controllers
         {
         }
 
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult Banks()
         {
             ViewData["VocabExtServiceRest"] = SettingsReader.VocabExtServiceRest;
@@ -22,6 +24,7 @@ namespace VX.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Words()
         {
             ViewData["VocabExtServiceRest"] = SettingsReader.VocabExtServiceRest;

@@ -12,12 +12,12 @@
         </div>
         <div data-bind="slideVisible : showContent">
             <div class="controlButtonsWrapper">
-                <button class="banksControlButton" data-bind="button: { 
+                <button class="control-button" data-bind="button: { 
                                             text: true, 
                                             label: 'Delete',
                                             icons: { primary: 'ui-icon-trash' }
                                         }, click: deleteBank"/>
-                <button class="banksControlButton" data-bind="button: { 
+                <button class="control-button" data-bind="button: { 
                                             text: true, 
                                             label: 'Create',
                                             icons: { primary: 'ui-icon-circle-plus' }
@@ -34,12 +34,12 @@
     <div data-bind="with: activeBank">
         <div id="rightPanel">
             <div class="controlButtonsWrapper">
-                <button class="banksControlButton" data-bind="button: { 
+                <button class="control-button" data-bind="button: { 
                                             text: true, 
                                             label: 'Add translation',
                                             icons: { primary: 'ui-icon-plus' }
                                         }, click: attachTranslation"/>
-                <button class="banksControlButton" data-bind="button: { 
+                <button class="control-button" data-bind="button: { 
                                             text: true, 
                                             label: 'Apply changes',
                                             icons: { primary: 'ui-icon-check' }
@@ -116,15 +116,15 @@
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
                         <td data-bind="text: activeSource().Spelling" />
                         <td data-bind="text: activeTarget().Spelling" />
-                        <td width="65">
-                            <button class="translation-button" data-bind="button: {
+                        <td width="67">
+                            <button class="imageonly-button" data-bind="button: {
                                     text: true, 
                                     label: '&nbsp;',
                                     icons: { primary: 'ui-icon-gear' }
                                 },
                                 click: openEditDialog" />
                             
-                            <button class="translation-button" data-bind="button: { 
+                            <button class="imageonly-button" data-bind="button: { 
                                     text: true, 
                                     label: '&nbsp;',
                                     icons: { primary: 'ui-icon-trash' }
@@ -294,11 +294,13 @@
                         if (responseData.OperationActionCode == 1) {
                             self.translations.push(self.activeTranslation);
                         }
-                        self.saveTranslationDialogVisible(false);
+                        
                     } else {
                         self.rollbackSelections();
-                        console.log("update failed, reason: " + data.errorMessage);
+                        console.log("update failed, reason: " + responseData.ErrorMessage);
                     }
+
+                    self.saveTranslationDialogVisible(false);
                 });
             };
 
