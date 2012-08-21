@@ -9,6 +9,9 @@
 <h1>Words</h1>
 <div id="centerPanel">
     <div class="controlButtonsWrapper">
+        <div data-bind="visible: checkIndicatorVisible" class="processingIndicator">
+            <img class="processingIndicator" src="/Content/Images/processing-loader.gif" alt="processing"/>
+        </div>
         <button class="control-button" data-bind="button: { 
                                                 text: true, 
                                                 label: 'Check Word',
@@ -21,26 +24,23 @@
         }, click: addWord"/>
     </div>
     
-    <div data-bind="with: activeWord, css: { wordBoxCorrect: wordExists() > 0, wordBoxIncorrect: wordExists() < 0 }" class="wordBox">
-        <div>
-            <div data-bind="css: { correctHighlight: $parent.spellingCorrect() > 0, incorrectHighlight: $parent.spellingCorrect() < 0 }">
-                Spelling:
-            </div>
-            <input type="text" data-bind="value: Spelling"/>
-        </div>
-        <div>
-            Transcription: <br/>
-            <input type="text" data-bind="value: Transcription"/>
-        </div>
-        <div>
-            <div data-bind="css: { correctHighlight: $parent.languageCorrect() > 0, incorrectHighlight: $parent.languageCorrect() < 0 }">
-                Language:
-            </div>
-            <select data-bind="options: $parent.availableLanguages, 
-                optionsText: 'Name',
-                value: $parent.selectedLanguage, 
-                optionsCaption: 'select language:'" />
-        </div>
+    <div data-bind="with: activeWord">
+        <label for="spelling" data-bind="css: { correctHighlight: $parent.spellingCorrect() > 0, incorrectHighlight: $parent.spellingCorrect() < 0 }">
+            Spelling:
+        </label>
+        <input id="spelling" type="text" data-bind="value: Spelling"/>
+        
+        <label for="transcription">Transcription:</label>
+        <input id="transcription" type="text" data-bind="value: Transcription"/>
+        
+        <label for="language" data-bind="css: { correctHighlight: $parent.languageCorrect() > 0, incorrectHighlight: $parent.languageCorrect() < 0 }">
+            Language:
+        </label>
+        <select id="language" data-bind="options: $parent.availableLanguages, 
+            optionsText: 'Name',
+            value: $parent.activeWord.Language, 
+            optionsCaption: 'Pick one:'" class="languageBox" />
+        
     </div>
 </div>
  
@@ -48,7 +48,6 @@
     var viewModel = {
         activeWord: new WordModel(null),
         availableLanguages: ko.observableArray(),
-        selectedLanguage: ko.observable(),
         vocabExtServiceRest: '<%:ViewData["VocabExtServiceRest"]%>',
         vocabServiceHost: '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html',
         getLanguagesUrl: '<%:ViewData["VocabExtServiceRest"]%>' + 'GetLanguages',
@@ -56,22 +55,34 @@
         validateWordUrl: '<%:ViewData["VocabExtServiceRest"]%>' + 'ValidateWord',
         spellingCorrect: ko.observable(0),
         languageCorrect: ko.observable(0),
-        wordExists: ko.observable(0),
+        checkIndicatorVisible: ko.observable(0),
 
         resetValidationState: function () {
-            viewModel.setValidationState(0, 0, 0);
+            viewModel.setValidationState(0, 0);
         },
 
-        setValidationState: function (spelling, language, word) {
+        setValidationState: function (spelling, language) {
             viewModel.spellingCorrect(spelling);
             viewModel.languageCorrect(language);
-            viewModel.wordExists(word);
         },
 
-        checkWord: function () {
+        analyseServiceResponse: function (responseData) {
+            if (!responseData.Status) {
+                console.log(responseData);
+                if (responseData.ErrorMessage == "1") {
+                    viewModel.setValidationState(-1, 0);
+                } else if (responseData.ErrorMessage == "2") {
+                    viewModel.setValidationState(0, -1);
+                } else if (responseData.ErrorMessage == "3") {
+                    viewModel.setValidationState(-1, 0);
+                } else {
+                    console.log('unknown error');
+                }
+            }
+        },
+
+        sendWordRequest: function (serviceUrl) {
             viewModel.resetValidationState();
-            console.log(viewModel.selectedLanguage);
-            console.log(viewModel.activeWord);
             if (viewModel.activeWord && viewModel.activeWord.Spelling()) {
                 var xhr = new easyXDM.Rpc({
                     remote: viewModel.vocabServiceHost
@@ -81,64 +92,30 @@
                     }
                 });
 
+                viewModel.checkIndicatorVisible(1);
                 xhr.request({
-                    url: viewModel.validateWordUrl,
+                    url: serviceUrl,
                     method: "POST",
-                    data: ko.toJSON({
-                        // TODO: should just send wordmodel, no custom rebuild
-                        Id: -1,
-                        Spelling: viewModel.activeWord.Spelling,
-                        Transcription: viewModel.activeWord.Transcription,
-                        Language: viewModel.selectedLanguage()
-                    })
+                    data: ko.toJSON(viewModel.activeWord)
                 }, function (response) {
+                    viewModel.checkIndicatorVisible(0);
                     var responseData = JSON.parse(response.data);
-                    if (responseData.Status) {
-                        viewModel.setValidationState(0, 0, 1);
-                    } else {
-                        console.log(responseData);
-                    }
+                    viewModel.analyseServiceResponse(responseData);
+                }, function () {
+                    viewModel.checkIndicatorVisible(0);
+                    viewModel.resetValidationState();
                 });
             } else {
-                viewModel.setValidationState(-1, 0, 0);
+                viewModel.setValidationState(-1, 0);
             }
         },
 
-        addWord: function () {
-            console.log(viewModel.activeWord);
-            var xhr = new easyXDM.Rpc({
-                remote: viewModel.vocabServiceHost
-            }, {
-                remote: {
-                    request: {}
-                }
-            });
+        checkWord: function () {
+            viewModel.sendWordRequest(viewModel.validateWordUrl);
+        },
 
-            xhr.request({
-                url: viewModel.saveWordUrl,
-                method: "POST",
-                data: ko.toJSON({
-                    // TODO: should just send wordmodel, no custom rebuild
-                    Id: -1,
-                    Spelling: viewModel.activeWord.Spelling,
-                    Transcription: viewModel.activeWord.Transcription,
-                    Language: viewModel.selectedLanguage()
-                })
-            }, function (response) {
-                /*var responseData = JSON.parse(response.data);
-                if (responseData.Status) {
-                if (responseData.OperationActionCode == 0) {
-                self.commitSelections();
-                }
-                if (responseData.OperationActionCode == 1) {
-                self.translations.push(self.activeTranslation);
-                }
-                self.saveTranslationDialogVisible(false);
-                } else {
-                self.rollbackSelections();
-                console.log("update failed, reason: " + data.errorMessage);
-                }*/
-            });
+        addWord: function () {
+            viewModel.sendWordRequest(viewModel.saveWordUrl);
         }
     };
 

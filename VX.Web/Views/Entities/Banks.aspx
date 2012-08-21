@@ -45,11 +45,12 @@
                                             icons: { primary: 'ui-icon-check' }
                                         }, click: updateHeaders"/>
             </div>
-            Name: <br/>
-            <input class="bankDetails" type="text" data-bind="value: bankName"/><br/>
-            Description: <br/>
-            <textarea cols="200" rows="3" data-bind="value: bankDescription" ></textarea><br/>
-            Translations: <br/>
+            <label for="bankName">Name:</label>
+            <input id="bankName" class="bankDetails" type="text" data-bind="value: bankName"/><br/>
+
+            <label for="description">Description:</label>
+            <textarea id="description" cols="200" rows="3" data-bind="value: bankDescription" ></textarea><br/>
+            <label>Translations:</label>
             <div data-bind="visible: loadingShown" align="center">
                 <img style="background: transparent; border: 0px" src="/Content/Images/loader.gif" alt="loading"/>
             </div>

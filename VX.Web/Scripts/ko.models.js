@@ -3,7 +3,7 @@
 
     if (wordData) {
         self.Id = wordData.Id;
-        self.Language = new LanguageModel(wordData.Language);
+        self.Language = ko.observable(new LanguageModel(wordData.Language));
         self.Spelling = ko.observable(wordData.Spelling);
         self.Transcription = ko.observable(wordData.Transcription);
     } else {
