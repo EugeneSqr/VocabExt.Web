@@ -95,6 +95,7 @@
     <Content Include="Content\Images\menubg.jpg" />
     <Content Include="Content\Images\nav-current.jpg" />
     <Content Include="Content\Images\page.gif" />
+    <Content Include="Content\Images\processing-loader.gif" />
     <Content Include="Content\Images\rssfeed.gif" />
     <Content Include="Content\Images\sidebarsep.jpg" />
     <Content Include="Content\Images\sidebullet.gif" />
