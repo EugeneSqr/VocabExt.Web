@@ -41,7 +41,6 @@
     </div>
 
     <script type="text/javascript">
-        jQuery.support.cors = true;
         function ListItemViewModel(data) {
             var self = this;
 
@@ -118,13 +117,13 @@
             self.showContent = ko.computed(function() {
                 return !self.showLoading();
             });
-            
+
+            self.vocabExtServiceRestUrl = '<%:ViewData["VocabExtServiceRest"] %>';
             self.vocabularies = ko.observableArray();
             self.subscribedVocabularies = ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>));
-            self.getTranslationsUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetTranslations';
-            self.getBanksListUrl = '<%:ViewData["VocabExtServiceRest"] %>' + 'GetVocabBanksList';
+            self.getTranslationsUrl = self.vocabExtServiceRestUrl  + 'GetTranslations';
+            self.getBanksListUrl = self.vocabExtServiceRestUrl + 'GetVocabBanksList';
             self.postBanksUrl = '<%:ViewData["MembershipServiceRest"] %>' + 'PostVocabBanks';
-  
         }
         
         var listViewModel = new ListViewModel();

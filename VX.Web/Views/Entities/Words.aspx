@@ -5,45 +5,28 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
 <h1>Words</h1>
 <div id="centerPanel">
     <div class="controlButtonsWrapper">
         <div data-bind="visible: checkIndicatorVisible" class="processingIndicator">
-            <img class="processingIndicator" src="/Content/Images/processing-loader.gif" alt="processing"/>
+            <img class="processingIndicator" src="/Content/Images/processing-loader.gif" alt="processing" />
         </div>
-        <button class="control-button" data-bind="button: { 
-                                                text: true, 
-                                                label: 'Check Word',
-                                                icons: { primary: 'ui-icon-check' }
-                                            }, click: checkWord"/>
-        <button class="control-button" data-bind="button: { 
-            text: true, 
-            label: 'Add word', 
-            icons: { primary: 'ui-icon-plus' } 
-        }, click: addWord"/>
+        <button class="control-button" data-bind="button: {text: true, label: 'Check Word', icons: {primary: 'ui-icon-check'}}, click: checkWord"></button>
+        <button class="control-button" data-bind="button: {text: true, label: 'Add word', icons: {primary: 'ui-icon-plus'}}, click: addWord"></button>
     </div>
-    
     <div data-bind="with: activeWord">
-        <label for="spelling" data-bind="css: { correctHighlight: $parent.spellingCorrect() > 0, incorrectHighlight: $parent.spellingCorrect() < 0 }">
+        <label for="spelling" data-bind="css: {correctHighlight: $parent.spellingCorrect() > 0, incorrectHighlight: $parent.spellingCorrect() < 0}">
             Spelling:
         </label>
         <input id="spelling" type="text" data-bind="value: Spelling"/>
-        
         <label for="transcription">Transcription:</label>
         <input id="transcription" type="text" data-bind="value: Transcription"/>
-        
-        <label for="language" data-bind="css: { correctHighlight: $parent.languageCorrect() > 0, incorrectHighlight: $parent.languageCorrect() < 0 }">
+        <label for="language" data-bind="css: {correctHighlight: $parent.languageCorrect() > 0, incorrectHighlight: $parent.languageCorrect() < 0}">
             Language:
         </label>
-        <select id="language" data-bind="options: $parent.availableLanguages, 
-            optionsText: 'Name',
-            value: $parent.activeWord.Language, 
-            optionsCaption: 'Pick one:'" class="languageBox" />
-        
     </div>
+    <select data-bind="options: availableLanguages, optionsText: 'Name', value: activeWord.Language, optionsCaption: 'Pick one:'" class="languageBox"></select>
 </div>
- 
 <script type="text/javascript">
     var viewModel = {
         activeWord: new WordModel(null),
@@ -55,7 +38,7 @@
         validateWordUrl: '<%:ViewData["VocabExtServiceRest"]%>' + 'ValidateWord',
         spellingCorrect: ko.observable(0),
         languageCorrect: ko.observable(0),
-        checkIndicatorVisible: ko.observable(0),
+        checkIndicatorVisible: ko.observable(false),
 
         resetValidationState: function () {
             viewModel.setValidationState(0, 0);
@@ -68,7 +51,6 @@
 
         analyseServiceResponse: function (responseData) {
             if (!responseData.Status) {
-                console.log(responseData);
                 if (responseData.ErrorMessage == "1") {
                     viewModel.setValidationState(-1, 0);
                 } else if (responseData.ErrorMessage == "2") {
@@ -92,17 +74,17 @@
                     }
                 });
 
-                viewModel.checkIndicatorVisible(1);
+                viewModel.checkIndicatorVisible(true);
                 xhr.request({
                     url: serviceUrl,
                     method: "POST",
                     data: ko.toJSON(viewModel.activeWord)
                 }, function (response) {
-                    viewModel.checkIndicatorVisible(0);
+                    viewModel.checkIndicatorVisible(false);
                     var responseData = JSON.parse(response.data);
                     viewModel.analyseServiceResponse(responseData);
                 }, function () {
-                    viewModel.checkIndicatorVisible(0);
+                    viewModel.checkIndicatorVisible(false);
                     viewModel.resetValidationState();
                 });
             } else {
@@ -119,22 +101,23 @@
         }
     };
 
-    ko.computed(function() {
+    ko.computed(function () {
+        console.log('getting languages');
         $.ajax({
             url: viewModel.getLanguagesUrl,
             dataType: 'jsonp',
-            jsonpCallback: "Languages",
-            success: function(languagesData) {
+            success: function (languagesData) {
                 for (index in languagesData) {
                     viewModel.availableLanguages.push(new LanguageModel(languagesData[index]));
                 }
             },
-            error: function() {
+            error: function (language) {
+                console.log(language);
                 console.log('error getting languages');
             }
         });
     });
-    
+
     ko.applyBindings(viewModel);
 </script>
 </asp:Content>
