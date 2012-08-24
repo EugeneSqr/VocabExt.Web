@@ -102,7 +102,6 @@
     };
 
     ko.computed(function () {
-        console.log('getting languages');
         $.ajax({
             url: viewModel.getLanguagesUrl,
             dataType: 'jsonp',
