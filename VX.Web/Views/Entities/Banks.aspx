@@ -290,7 +290,7 @@
                         self.commitSelections();
                     }
                     if (responseData.OperationActionCode == 1) {
-                        self.translations.push(self.activeTranslation);
+                        self.translations.push(self.activeTranslation());
                     }
 
                 } else {
