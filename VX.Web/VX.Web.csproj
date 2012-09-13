@@ -43,6 +43,7 @@
       <HintPath>..\.Libraries\Autofac\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -60,6 +61,7 @@
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Xml" />
     <Reference Include="VX.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\.Libraries\VX.Domain.dll</HintPath>
@@ -113,7 +115,6 @@
     <Content Include="Content\themes\greeny\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\themes\greeny\jquery-ui-1.8.21.custom.css" />
     <Content Include="Global.asax" />
-    <None Include="Service References\VocabExtServiceReference\VocabExtService.disco" />
     <None Include="Service References\VocabExtServiceReference\configuration91.svcinfo" />
     <None Include="Service References\VocabExtServiceReference\configuration.svcinfo" />
     <None Include="Service References\VocabExtServiceReference\Reference.svcmap">
@@ -126,6 +127,7 @@
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\ko.custom.js" />
     <Content Include="Scripts\ko.models.js" />
+    <None Include="Service References\VocabExtServiceReference\VocabExtService1.disco" />
     <Content Include="Views\Entities\Banks.aspx" />
     <Content Include="Views\Entities\Index.aspx" />
     <Content Include="Views\Entities\Words.aspx" />
@@ -151,17 +153,26 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Service References\VocabExtServiceReference\VocabExtService.wsdl" />
-    <None Include="Service References\VocabExtServiceReference\VocabExtService.xsd">
+    <None Include="Service References\VocabExtServiceReference\VocabExtService1.wsdl" />
+    <None Include="Service References\VocabExtServiceReference\VocabExtService4.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\VocabExtServiceReference\VocabExtService1.xsd">
+    <None Include="Service References\VocabExtServiceReference\VocabExtService41.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\VocabExtServiceReference\VocabExtService2.xsd">
+    <None Include="Service References\VocabExtServiceReference\VocabExtService42.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\VocabExtServiceReference\VocabExtService3.xsd">
+    <None Include="Service References\VocabExtServiceReference\VocabExtService43.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\VocabExtServiceReference\VocabExtService44.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\VocabExtServiceReference\VocabExtService45.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\VocabExtServiceReference\VocabExtService46.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

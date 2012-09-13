@@ -40,114 +40,109 @@
         </table>
     </div>
 
-    <script type="text/javascript">
-        function ListItemViewModel(data) {
-            var self = this;
+<script type="text/javascript">
+(function() {
+    vx.initialize('<%:ViewData["VocabExtServiceRest"] %>');
+    
+    function listItemViewModel(data) {
+        var self = this;
 
-            self.translationsShown = ko.observable(false);
-
-            self.translations = ko.observableArray();
-
-            self.isUsed = ko.observable(false);
-
-            self.Id = ko.observable(data.Id);
-
-            ko.computed(function () {
-                self.isUsed(listViewModel.subscribedVocabularies().indexOf(this.Id()) != -1);
-            }, self);
-
-            self.sendUpdateRequest = function() {
-                if (self.isUsed()) {
-                    if (listViewModel.subscribedVocabularies().indexOf(this.Id()) == -1) {
-                        listViewModel.subscribedVocabularies.push(this.Id());   
-                    }
-                } else {
-                    listViewModel.subscribedVocabularies.remove(this.Id());
-                }
-                
-                $.ajax({
-                    type: 'POST',
-                    url: listViewModel.postBanksUrl,
-                    data: JSON.stringify(listViewModel.subscribedVocabularies())
-                });
-                return true;
-            };
-            
-            self.showTranslations = function () {
-                if (!self.translationsShown()) {
-                    $.ajax({
-                        url: listViewModel.getTranslationsUrl + '/' + self.Id(),
-                        dataType: 'jsonp',
-                        jsonpCallback: "Translations",
-                        success: function (translationsData) {
-                            var translations = eval(translationsData);
-                            self.translations.removeAll();
-                            for (index in translations) {
-                                self.translations.push({
-                                    SourceSpelling: translations[index].Source.Spelling,
-                                    SourceTranscription: translations[index].Source.Transcription,
-                                    TargetSpelling: translations[index].Target.Spelling,
-                                    TargetTranscription: translations[index].Target.Transcription
-                                });
-                            }
-
-                            self.translationsShown(true);
-                        },
-                        error: function () {
-                            self.translationsShown(true);
-                        }
-                    });
-                } else {
-                    self.translations.removeAll();
-                    self.translationsShown(false);
-                }
-            };
-
-            self.showTranslation = function(elem) {
-                if (elem.nodeType === 1) $(elem).hide().fadeIn('slow');
-            };
-
-            ko.mapping.fromJS(data, {}, self);
-        }
-
-        function ListViewModel() {
-            var self = this;
-
-            self.showLoading = ko.observable(true);
-            self.showContent = ko.computed(function() {
-                return !self.showLoading();
-            });
-
-            self.vocabExtServiceRestUrl = '<%:ViewData["VocabExtServiceRest"] %>';
-            self.vocabularies = ko.observableArray();
-            self.subscribedVocabularies = ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>));
-            self.getTranslationsUrl = self.vocabExtServiceRestUrl  + 'GetTranslations';
-            self.getBanksListUrl = self.vocabExtServiceRestUrl + 'GetVocabBanksList';
-            self.postBanksUrl = '<%:ViewData["MembershipServiceRest"] %>' + 'PostVocabBanks';
-        }
-        
-        var listViewModel = new ListViewModel();
+        self.translationsShown = ko.observable(false);
+        self.translations = ko.observableArray();
+        self.isUsed = ko.observable(false);
+        self.Id = ko.observable(data.Id);
 
         ko.computed(function () {
-            $.ajax({
-                url: listViewModel.getBanksListUrl,
-                dataType: 'jsonp',
-                jsonpCallback: "BanksList",
-                success: function (data) {
-                    var vocabularies = eval(data);
-                    for (index in vocabularies) {
-                        listViewModel.vocabularies.push(new ListItemViewModel(vocabularies[index]));
-                    }
-                    listViewModel.showLoading(false);
-                },
-                error: function(data, textStatus, errorThrown) {
-                    console.log(data);
-                    console.log(textStatus);
-                    console.log(errorThrown);
+            self.isUsed(viewModel.subscribedVocabularies().indexOf(this.Id()) != -1);
+        }, self);
+
+        self.sendUpdateRequest = function() {
+            if (self.isUsed()) {
+                if (viewModel.subscribedVocabularies().indexOf(this.Id()) == -1) {
+                    viewModel.subscribedVocabularies.push(this.Id());   
                 }
+            } else {
+                viewModel.subscribedVocabularies.remove(this.Id());
+            }
                 
+            $.ajax({
+                type: 'POST',
+                url: viewModel.postBanksUrl,
+                data: JSON.stringify(viewModel.subscribedVocabularies())
             });
-        }, listViewModel);
-        ko.applyBindings(listViewModel);
-    </script>
+            return true;
+        };
+            
+        self.showTranslations = function () {
+            if (!self.translationsShown()) {
+                $.ajax({
+                    url: vx.BuildGetTranslationsUrl(self.Id()),
+                    dataType: 'jsonp',
+                    success: function (translationsData) {
+                        var translations = eval(translationsData);
+                        self.translations.removeAll();
+                        for (index in translations) {
+                            self.translations.push({
+                                SourceSpelling: translations[index].Source.Spelling,
+                                SourceTranscription: translations[index].Source.Transcription,
+                                TargetSpelling: translations[index].Target.Spelling,
+                                TargetTranscription: translations[index].Target.Transcription
+                            });
+                        }
+
+                        self.translationsShown(true);
+                    },
+                    error: function () {
+                        self.translationsShown(true);
+                    }
+                });
+            } else {
+                self.translations.removeAll();
+                self.translationsShown(false);
+            }
+        };
+
+        self.showTranslation = function(elem) {
+            if (elem.nodeType === 1) $(elem).hide().fadeIn('slow');
+        };
+
+        ko.mapping.fromJS(data, {}, self);
+    }
+
+    function listViewModel() {
+        var self = this;
+
+        self.showLoading = ko.observable(true);
+        self.showContent = ko.computed(function() {
+            return !self.showLoading();
+        });
+        
+        self.vocabularies = ko.observableArray();
+        self.subscribedVocabularies = ko.observableArray(eval(<%:ViewData["SubscribedVocabularies"] %>));
+        self.postBanksUrl = '<%:ViewData["MembershipServiceRest"] %>' + 'PostVocabBanks';
+    };
+        
+    var viewModel = new listViewModel();
+
+    ko.computed(function () {
+        $.ajax({
+            url: vx.BuildGetBanksSummaryUrl(),
+            dataType: 'jsonp',
+            success: function (data) {
+                var vocabularies = eval(data);
+                for (index in vocabularies) {
+                    viewModel.vocabularies.push(new listItemViewModel(vocabularies[index]));
+                }
+                viewModel.showLoading(false);
+            },
+            error: function(data, textStatus, errorThrown) {
+                console.log(data);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+    }, viewModel);
+    ko.applyBindings(viewModel);
+})();
+</script>
 </asp:Content>

@@ -68,11 +68,11 @@
 	                                
 	        <div>Specify source:</div>
             <input class="dialog-text-input" data-bind="autocomplete: { 
-                    source: banksListViewModel.sourceOptions(), 
+                    source: $parent.sourceOptions(), 
                     select: fillTranslationSourceFromAutocomplete,
                     minLength: 2
                 },
-                searchString: banksListViewModel.sourceSearchString"/>
+                searchString: $parent.sourceSearchString"/>
                                     
             <div>Active source:</div>
             <div class="dialog-group">
@@ -90,11 +90,11 @@
             <div class="dialog-right-column">
                 <div>Specify target:</div>
                 <input class="dialog-text-input" data-bind="autocomplete: { 
-                        source: banksListViewModel.targetOptions(), 
+                        source: $parent.targetOptions(), 
                         select: fillTranslationTargetFromAutocomplete,
                         minLength: 2
                     },
-                    searchString: banksListViewModel.targetSearchString"/>
+                    searchString: $parent.targetSearchString"/>
                 <div>Active target:</div>
                 <div class="dialog-group">
                     <div data-bind="with: activeTranslation">
@@ -140,26 +140,20 @@
 </div>
 <div class="clear"></div>
 <script type="text/javascript">
-    function BanksListModel() {
+(function () {
+    vx.initialize('<%:ViewData["VocabExtServiceRest"]%>');
+    function banksListModel() {
         var self = this;
 
         self.showLoading = ko.observable(true);
         self.showContent = ko.computed(function () {
             return !self.showLoading();
         });
-
-        self.vocabExtServiceRest = '<%:ViewData["VocabExtServiceRest"]%>';
+        
         self.vocabularies = ko.observableArray();
         self.activeBank = ko.observable();
-        self.getBanksListUrl = self.vocabExtServiceRest + 'GetVocabBanksList';
-        self.getTranslationsUrl = self.vocabExtServiceRest + 'GetTranslations';
-        self.saveTranslationUrl = self.vocabExtServiceRest + 'SaveTranslation';
-        self.detachTranslationUrl = self.vocabExtServiceRest + 'DetachTranslation';
-        self.getWordsUrl = self.vocabExtServiceRest + 'GetWords';
-        self.updateHeadersUrl = self.vocabExtServiceRest + 'UpdateBankHeaders';
-        self.createNewBankUrl = self.vocabExtServiceRest + 'CreateNewVocabularyBank';
-        self.deleteVocabularyBankUrl = self.vocabExtServiceRest + 'DeleteVocabularyBank';
         self.vocabServiceHost = '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html';
+        self.headersBeforeUpdate = {};
 
         self.sourceOptions = ko.observableArray();
         self.sourceOptionsRaw = [];
@@ -173,23 +167,23 @@
             return (typeof entity != 'undefined' && entity.hasOwnProperty("id") && entity.id > 0);
         };
 
-        self.displayDetails = function (bankDetailsModel) {
-            if (self.checkId(bankDetailsModel)) {
-                self.activeBank(bankDetailsModel);
+        self.displayDetails = function (detailsViewModel) {
+            if (self.checkId(detailsViewModel)) {
+                self.activeBank(detailsViewModel);
                 $.ajax({
-                    url: self.getTranslationsUrl + '/' + bankDetailsModel.id,
+                    url: vx.BuildGetTranslationsUrl(detailsViewModel.id),
                     dataType: 'jsonp',
                     success: function (translationsData) {
                         var translations = eval(translationsData);
-                        bankDetailsModel.translations.removeAll();
+                        detailsViewModel.translations.removeAll();
                         for (index in translations) {
-                            bankDetailsModel.translations.push(new TranslationModel(translations[index], bankDetailsModel));
+                            detailsViewModel.translations.push(new translationModel(translations[index], detailsViewModel));
                         }
-                        
-                        bankDetailsModel.translationsShown(true);
+
+                        detailsViewModel.translationsShown(true);
                     },
                     error: function () {
-                        bankDetailsModel.translationsShown(true);
+                        detailsViewModel.translationsShown(true);
                     }
                 });
             }
@@ -197,10 +191,10 @@
 
         self.createNewBank = function () {
             $.ajax({
-                url: self.createNewBankUrl,
+                url: vx.BuildCreateVocabBankUrl(),
                 dataType: 'jsonp',
                 success: function (vocabBankData) {
-                    var newVocabBank = new BankDetailsModel(vocabBankData);
+                    var newVocabBank = new bankDetailsModel(vocabBankData);
                     self.vocabularies.push(newVocabBank);
                     self.displayDetails(newVocabBank);
                 },
@@ -212,7 +206,7 @@
 
         self.deleteBank = function () {
             $.ajax({
-                url: self.deleteVocabularyBankUrl + '/' + self.activeBank().id,
+                url: vx.DeleteVocabularyBankUrl(self.activeBank().id),
                 dataType: 'jsonp',
                 success: function (response) {
                     if (response.Status) {
@@ -236,9 +230,9 @@
         };
     }
 
-    function BankDetailsModel(bankData) {
+    function bankDetailsModel(bankData) {
         var self = this;
-        
+
         self.id = bankData.Id;
         self.bankName = ko.observable(bankData.Name);
         self.bankDescription = bankData.Description;
@@ -259,7 +253,7 @@
         };
 
         self.attachTranslation = function () {
-            self.setActiveTranslation(new TranslationModel(null, self));
+            self.setActiveTranslation(new translationModel(null, self));
             self.saveTranslationDialogVisible(true);
         };
 
@@ -273,7 +267,7 @@
             });
 
             xhr.request({
-                url: banksListViewModel.saveTranslationUrl,
+                url: vx.BuildSaveTranslationUrl(),
                 method: "POST",
                 data: ko.toJSON({
                     VocabBankId: self.id,
@@ -309,16 +303,16 @@
 
         self.fillTranslationSourceFromAutocomplete = function (event, ui) {
             self.fillFromAutocomplete(
-            banksListViewModel.sourceOptionsRaw,
-            self.activeTranslation().activeSource,
-            ui.item.value);
+                banksListViewModel.sourceOptionsRaw,
+                self.activeTranslation().activeSource,
+                ui.item.value);
         };
 
         self.fillTranslationTargetFromAutocomplete = function (event, ui) {
             self.fillFromAutocomplete(
-            banksListViewModel.targetOptionsRaw,
-            self.activeTranslation().activeTarget,
-            ui.item.value);
+                banksListViewModel.targetOptionsRaw,
+                self.activeTranslation().activeTarget,
+                ui.item.value);
         };
 
         self.fillFromAutocomplete = function (source, target, selected) {
@@ -360,20 +354,20 @@
             });
 
             xhr.request({
-                url: banksListViewModel.detachTranslationUrl,
+                url: vx.BuildDetachTranslationUrl(),
                 method: "POST",
                 data: JSON.stringify({
                     parent: self.id,
                     child: self.activeTranslation().Id
                 })
             },
-        function (response) {
-            if (JSON.parse(response.data).Status) {
-                self.translations.remove(function (item) {
-                    return item.Id == self.activeTranslation().Id;
+                function (response) {
+                    if (JSON.parse(response.data).Status) {
+                        self.translations.remove(function (item) {
+                            return item.Id == self.activeTranslation().Id;
+                        });
+                    }
                 });
-            }
-        });
 
             self.deleteConfirmationDialogVisible(false);
         };
@@ -384,6 +378,10 @@
 
         // Update headers
         self.updateHeaders = function () {
+            self.oldHeaders = {
+                Name: self.bankName,
+                Description: self.bankDescription
+            };
             var xhr = new easyXDM.Rpc({
                 remote: banksListViewModel.vocabServiceHost
             }, {
@@ -393,7 +391,7 @@
             });
 
             xhr.request({
-                url: banksListViewModel.updateHeadersUrl,
+                url: vx.BuildUpdateBankSummaryUrl(),
                 method: "POST",
                 data: ko.toJSON({
                     VocabBankId: self.id,
@@ -402,10 +400,9 @@
                 })
             }, function (response) {
                 var responseData = JSON.parse(response.data);
-                if (responseData.Status) {
-
-                } else {
-                    self.rollbackSelections();
+                if (!responseData.Status) {
+                    self.bankName = self.oldHeaders.Name;
+                    self.bankDescription = self.oldHeaders.Description;
                     console.log("update failed, reason: " + data.errorMessage);
                 }
             });
@@ -417,9 +414,9 @@
         };
     }
 
-    function TranslationModel(translationData, bankDetailsModel) {
+    function translationModel(translationData, detailsViewModel) {
         var self = this;
-        self.parent = bankDetailsModel;
+        self.parent = detailsViewModel;
 
         if (translationData) {
             self.Id = translationData.Id;
@@ -442,17 +439,17 @@
             self.parent.deleteTranslation(self);
         };
     }
-        
-    var banksListViewModel = new BanksListModel();
+
+    var banksListViewModel = new banksListModel();
 
     ko.computed(function () {
         $.ajax({
-            url: banksListViewModel.getBanksListUrl,
+            url: vx.BuildGetBanksSummaryUrl(),
             dataType: 'jsonp',
             success: function (data) {
                 var vocabularies = eval(data);
                 for (index in vocabularies) {
-                    banksListViewModel.vocabularies.push(new BankDetailsModel(vocabularies[index]));
+                    banksListViewModel.vocabularies.push(new bankDetailsModel(vocabularies[index]));
                 }
                 banksListViewModel.displayDetails(banksListViewModel.vocabularies()[0]);
                 banksListViewModel.showLoading(false);
@@ -470,7 +467,7 @@
         function getWords(searchString, successCallback) {
             if (searchString != "") {
                 $.ajax({
-                    url: banksListViewModel.getWordsUrl + "/" + searchString,
+                    url: vx.BuildGetWordsUrl(searchString),
                     dataType: 'jsonp',
                     success: successCallback,
                     error: function (data, textStatus, errorThrown) {
@@ -483,25 +480,26 @@
         }
 
         getWords(
-        banksListViewModel.sourceSearchString(),
-        function (wordsData) {
-            banksListViewModel.sourceOptions.removeAll();
-            banksListViewModel.sourceOptionsRaw = wordsData;
-            for (index in wordsData) {
-                banksListViewModel.sourceOptions().push(wordsData[index].Spelling);
-            }
-        });
+            banksListViewModel.sourceSearchString(),
+            function (wordsData) {
+                banksListViewModel.sourceOptions.removeAll();
+                banksListViewModel.sourceOptionsRaw = wordsData;
+                for (index in wordsData) {
+                    banksListViewModel.sourceOptions().push(wordsData[index].Spelling);
+                }
+            });
 
         getWords(
-        banksListViewModel.targetSearchString(),
-        function (wordsData) {
-            banksListViewModel.targetOptions.removeAll();
-            banksListViewModel.targetOptionsRaw = wordsData;
-            for (index in wordsData) {
-                banksListViewModel.targetOptions().push(wordsData[index].Spelling);
-            }
-        });
+            banksListViewModel.targetSearchString(),
+            function (wordsData) {
+                banksListViewModel.targetOptions.removeAll();
+                banksListViewModel.targetOptionsRaw = wordsData;
+                for (index in wordsData) {
+                    banksListViewModel.targetOptions().push(wordsData[index].Spelling);
+                }
+            });
     }, banksListViewModel);
     ko.applyBindings(banksListViewModel);
+} ());
 </script>
 </asp:Content>
