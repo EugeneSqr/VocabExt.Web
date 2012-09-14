@@ -5,42 +5,62 @@ vx.getTranslations = "GetTranslations";
 vx.saveTranslation = "SaveTranslation";
 vx.detachTranslation = "DetachTranslation";
 vx.getWords = "GetWords";
+vx.saveWord = "SaveWord";
+vx.validateWord = "ValidateWord";
 vx.updateBankSummary = "UpdateBankSummary";
 vx.createVocabBank = "CreateVocabBank";
 vx.deleteVocabBank = "DeleteVocabularyBank";
+vx.getLanguages = "GetLanguages";
 
-vx.initialize = function(serviceHost) {
+vx.initialize = function (restBase, serviceHost) {
     vx.serviceHost = serviceHost;
+    vx.restBase = restBase;
 };
 
 vx.BuildGetBanksSummaryUrl = function () {
-    return vx.serviceHost + '/' + vx.banksSummary;
+    return vx.restBase + '/' + vx.banksSummary;
 };
 
 vx.BuildGetTranslationsUrl = function(vocabBankId) {
-    return vx.serviceHost + '/' + vx.getTranslations + '/' + vocabBankId;
+    return vx.restBase + '/' + vx.getTranslations + '/' + vocabBankId;
 };
 
 vx.BuildSaveTranslationUrl = function() {
-    return vx.serviceHost + '/' + vx.saveTranslation;
+    return vx.restBase + vx.saveTranslation;
 };
 
 vx.BuildDetachTranslationUrl = function() {
-    return vx.serviceHost + '/' + vx.detachTranslation;
+    return vx.restBase + '/' + vx.detachTranslation;
 };
 
 vx.BuildGetWordsUrl = function(searchString) {
-    return vx.serviceHost + '/' + vx.getWords + '/' + searchString;
+    return vx.restBase + '/' + vx.getWords + '/' + searchString;
+};
+
+vx.BuildSaveWordUrl = function() {
+    return vx.restBase + '/' + vx.saveWord;
+};
+
+vx.BuildValidateWordUrl = function() {
+    return vx.restBase + '/' + vx.validateWord;
 };
 
 vx.BuildUpdateBankSummaryUrl = function() {
-    return vx.serviceHost + '/' + vx.updateBankSummary;
+    return vx.restBase + '/' + vx.updateBankSummary;
 };
 
 vx.BuildCreateVocabBankUrl = function() {
-    return vx.serviceHost + '/' + vx.createVocabBank;
+    return vx.restBase + '/' + vx.createVocabBank;
 };
 
-vx.DeleteVocabularyBankUrl = function(vocabBankId) {
-    return vx.serviceHost + '/' + vx.deleteVocabBank + '/' + vocabBankId;
+vx.BuildDeleteVocabularyBankUrl = function(vocabBankId) {
+    return vx.restBase + '/' + vx.deleteVocabBank + '/' + vocabBankId;
+};
+
+vx.BuildServiceHostUrl = function () {
+    return vx.serviceHost + '/Infrastructure/easyXDM/cors/index.html';
+};
+
+vx.BuildGetLanguagesUrl = function () {
+    return vx.restBase + '/' + vx.getLanguages;
 };

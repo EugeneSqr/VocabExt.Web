@@ -128,6 +128,7 @@
     <Content Include="Scripts\ko.custom.js" />
     <Content Include="Scripts\ko.models.js" />
     <None Include="Service References\VocabExtServiceReference\VocabExtService1.disco" />
+    <Content Include="Scripts\vx.js" />
     <Content Include="Views\Entities\Banks.aspx" />
     <Content Include="Views\Entities\Index.aspx" />
     <Content Include="Views\Entities\Words.aspx" />

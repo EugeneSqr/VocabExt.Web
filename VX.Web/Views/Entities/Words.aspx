@@ -14,28 +14,30 @@
         <button class="control-button" data-bind="button: {text: true, label: 'Check Word', icons: {primary: 'ui-icon-check'}}, click: checkWord"></button>
         <button class="control-button" data-bind="button: {text: true, label: 'Add word', icons: {primary: 'ui-icon-plus'}}, click: addWord"></button>
     </div>
-    <div data-bind="with: activeWord">
-        <label for="spelling" data-bind="css: {correctHighlight: $parent.spellingCorrect() > 0, incorrectHighlight: $parent.spellingCorrect() < 0}">
-            Spelling:
-        </label>
-        <input id="spelling" type="text" data-bind="value: Spelling"/>
-        <label for="transcription">Transcription:</label>
-        <input id="transcription" type="text" data-bind="value: Transcription"/>
-        <label for="language" data-bind="css: {correctHighlight: $parent.languageCorrect() > 0, incorrectHighlight: $parent.languageCorrect() < 0}">
-            Language:
-        </label>
-    </div>
-    <select data-bind="options: availableLanguages, optionsText: 'Name', value: activeWord.Language, optionsCaption: 'Pick one:'" class="languageBox"></select>
+    
+    <label for="spelling" data-bind="css: {correctHighlight: spellingCorrect() > 0, incorrectHighlight: spellingCorrect() < 0}">
+        Spelling:
+    </label>
+    <input id="spelling" type="text" data-bind="value: spelling"/>
+    <label for="transcription">Transcription:</label>
+    <input id="transcription" type="text" data-bind="value: transcription"/>
+    <label for="language" data-bind="css: {correctHighlight: languageCorrect() > 0, incorrectHighlight: languageCorrect() < 0}">
+        Language:
+    </label>
+    
+    <select data-bind="options: languages, optionsText: 'Name', value: language, optionsCaption: 'Pick one:'" class="languageBox"></select>
 </div>
 <script type="text/javascript">
+(function () {
+    vx.initialize('<%:ViewData["VocabExtServiceRest"]%>', '<%:ViewData["VocabExtServiceHost"] %>');
+
     var viewModel = {
-        activeWord: new WordModel(null),
-        availableLanguages: ko.observableArray(),
-        vocabExtServiceRest: '<%:ViewData["VocabExtServiceRest"]%>',
-        vocabServiceHost: '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html',
-        getLanguagesUrl: '<%:ViewData["VocabExtServiceRest"]%>' + 'GetLanguages',
-        saveWordUrl: '<%:ViewData["VocabExtServiceRest"]%>' + 'SaveWord',
-        validateWordUrl: '<%:ViewData["VocabExtServiceRest"]%>' + 'ValidateWord',
+        wordModel: new WordModel(null),
+        spelling: ko.observable(""),
+        transcription: ko.observable(""),
+        language: ko.observable(),
+        languages: ko.observableArray(),
+
         spellingCorrect: ko.observable(0),
         languageCorrect: ko.observable(0),
         checkIndicatorVisible: ko.observable(false),
@@ -44,9 +46,9 @@
             viewModel.setValidationState(0, 0);
         },
 
-        setValidationState: function (spelling, language) {
-            viewModel.spellingCorrect(spelling);
-            viewModel.languageCorrect(language);
+        setValidationState: function (spellingState, languageState) {
+            viewModel.spellingCorrect(spellingState);
+            viewModel.languageCorrect(languageState);
         },
 
         analyseServiceResponse: function (responseData) {
@@ -65,49 +67,47 @@
 
         sendWordRequest: function (serviceUrl) {
             viewModel.resetValidationState();
-            if (viewModel.activeWord && viewModel.activeWord.Spelling()) {
-                var xhr = new easyXDM.Rpc({
-                    remote: viewModel.vocabServiceHost
-                }, {
-                    remote: {
-                        request: {}
-                    }
-                });
 
-                viewModel.checkIndicatorVisible(true);
-                xhr.request({
-                    url: serviceUrl,
-                    method: "POST",
-                    data: ko.toJSON(viewModel.activeWord)
-                }, function (response) {
-                    viewModel.checkIndicatorVisible(false);
-                    var responseData = JSON.parse(response.data);
-                    viewModel.analyseServiceResponse(responseData);
-                }, function () {
-                    viewModel.checkIndicatorVisible(false);
-                    viewModel.resetValidationState();
-                });
-            } else {
-                viewModel.setValidationState(-1, 0);
-            }
+            var xhr = new easyXDM.Rpc({
+                remote: vx.BuildServiceHostUrl()
+            }, {
+                remote: {
+                    request: {}
+                }
+            });
+
+            viewModel.checkIndicatorVisible(true);
+            xhr.request({
+                url: serviceUrl,
+                method: "POST",
+                data: ko.toJSON(viewModel.wordModel)
+            }, function (response) {
+                viewModel.checkIndicatorVisible(false);
+                var responseData = JSON.parse(response.data);
+                viewModel.analyseServiceResponse(responseData);
+            }, function () {
+                viewModel.checkIndicatorVisible(false);
+                viewModel.resetValidationState();
+            });
+
         },
 
         checkWord: function () {
-            viewModel.sendWordRequest(viewModel.validateWordUrl);
+            viewModel.sendWordRequest(vx.BuildValidateWordUrl());
         },
 
         addWord: function () {
-            viewModel.sendWordRequest(viewModel.saveWordUrl);
+            viewModel.sendWordRequest(vx.BuildSaveWordUrl());
         }
     };
 
     ko.computed(function () {
         $.ajax({
-            url: viewModel.getLanguagesUrl,
+            url: vx.BuildGetLanguagesUrl(),
             dataType: 'jsonp',
             success: function (languagesData) {
                 for (index in languagesData) {
-                    viewModel.availableLanguages.push(new LanguageModel(languagesData[index]));
+                    viewModel.languages.push(new LanguageModel(languagesData[index]));
                 }
             },
             error: function (language) {
@@ -117,6 +117,13 @@
         });
     });
 
+    ko.computed(function () {
+        viewModel.wordModel.Spelling = viewModel.spelling();
+        viewModel.wordModel.Transcription = viewModel.transcription();
+        viewModel.wordModel.Language = viewModel.language();
+    });
+
     ko.applyBindings(viewModel);
+})();
 </script>
 </asp:Content>

@@ -69,7 +69,7 @@
 	        <div>Specify source:</div>
             <input class="dialog-text-input" data-bind="autocomplete: { 
                     source: $parent.sourceOptions(), 
-                    select: fillTranslationSourceFromAutocomplete,
+                    select: fillDialogTranslationSource,
                     minLength: 2
                 },
                 searchString: $parent.sourceSearchString"/>
@@ -78,9 +78,9 @@
             <div class="dialog-group">
                 <div data-bind="with: activeTranslation">
                     <div>Spelling</div>
-                    <input data-bind="value: activeSource().Spelling" class="dialog-text-input" type="text" disabled="disabled"></input>
+                    <input data-bind="value: dialog.sourceSpelling" class="dialog-text-input" type="text" disabled="disabled"></input>
                     <div>Transcription</div>
-                    <input data-bind="value: activeSource().Transcription" class="dialog-text-input" type="text" disabled="disabled"></input>
+                    <input data-bind="value: dialog.sourceTranscription" class="dialog-text-input" type="text" disabled="disabled"></input>
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@
                 <div>Specify target:</div>
                 <input class="dialog-text-input" data-bind="autocomplete: { 
                         source: $parent.targetOptions(), 
-                        select: fillTranslationTargetFromAutocomplete,
+                        select: fillDialogTranslationTarget,
                         minLength: 2
                     },
                     searchString: $parent.targetSearchString"/>
@@ -99,9 +99,9 @@
                 <div class="dialog-group">
                     <div data-bind="with: activeTranslation">
                         <div>Spelling</div>
-                        <input data-bind="value: activeTarget().Spelling" type="text" class="dialog-text-input" disabled="disabled"></input>
+                        <input data-bind="value: dialog.targetSpelling" type="text" class="dialog-text-input" disabled="disabled"></input>
                         <div>Transcription</div>
-                        <input data-bind="value: activeTarget().Transcription" type="text" class="dialog-text-input" disabled="disabled"></input>
+                        <input data-bind="value: dialog.targetTranscription" type="text" class="dialog-text-input" disabled="disabled"></input>
                     </div>
                 </div>
             </div>
@@ -115,8 +115,8 @@
             <table>
                 <tbody data-bind="foreach: translations">
                     <tr data-bind="css: { odd: (index % 2 == 1), even: (index % 2 == 0) }">
-                        <td data-bind="text: activeSource().Spelling" />
-                        <td data-bind="text: activeTarget().Spelling" />
+                        <td data-bind="text: list.sourceSpelling" />
+                        <td data-bind="text: list.targetSpelling" />
                         <td width="72">
                             <button class="imageonly-button" data-bind="button: {
                                     text: true, 
@@ -141,7 +141,7 @@
 <div class="clear"></div>
 <script type="text/javascript">
 (function () {
-    vx.initialize('<%:ViewData["VocabExtServiceRest"]%>');
+    vx.initialize('<%:ViewData["VocabExtServiceRest"]%>', '<%:ViewData["VocabExtServiceHost"] %>');
     function banksListModel() {
         var self = this;
 
@@ -149,10 +149,9 @@
         self.showContent = ko.computed(function () {
             return !self.showLoading();
         });
-        
+
         self.vocabularies = ko.observableArray();
         self.activeBank = ko.observable();
-        self.vocabServiceHost = '<%:ViewData["VocabExtServiceHost"] %>' + '/Infrastructure/easyXDM/cors/index.html';
         self.headersBeforeUpdate = {};
 
         self.sourceOptions = ko.observableArray();
@@ -177,7 +176,7 @@
                         var translations = eval(translationsData);
                         detailsViewModel.translations.removeAll();
                         for (index in translations) {
-                            detailsViewModel.translations.push(new translationModel(translations[index], detailsViewModel));
+                            detailsViewModel.translations.push(new translationItemModel(translations[index], detailsViewModel));
                         }
 
                         detailsViewModel.translationsShown(true);
@@ -206,7 +205,7 @@
 
         self.deleteBank = function () {
             $.ajax({
-                url: vx.DeleteVocabularyBankUrl(self.activeBank().id),
+                url: vx.BuildDeleteVocabularyBankUrl(self.activeBank().id),
                 dataType: 'jsonp',
                 success: function (response) {
                     if (response.Status) {
@@ -226,9 +225,14 @@
                 error: function () {
                     console.log('error creating new bank');
                 }
-            }); ;
+            });
         };
-    }
+
+        self.resetSearchStrings = function () {
+            self.sourceSearchString("");
+            self.targetSearchString("");
+        };
+    };
 
     function bankDetailsModel(bankData) {
         var self = this;
@@ -253,13 +257,14 @@
         };
 
         self.attachTranslation = function () {
-            self.setActiveTranslation(new translationModel(null, self));
+            self.setActiveTranslation(new translationItemModel(null, self));
             self.saveTranslationDialogVisible(true);
         };
 
         self.submitEditDialog = function () {
+            console.log(self.activeTranslation().dirty);
             var xhr = new easyXDM.Rpc({
-                remote: banksListViewModel.vocabServiceHost
+                remote: vx.BuildServiceHostUrl()
             }, {
                 remote: {
                     request: {}
@@ -271,11 +276,7 @@
                 method: "POST",
                 data: ko.toJSON({
                     VocabBankId: self.id,
-                    Translation: {
-                        Id: self.activeTranslation().Id,
-                        Source: self.activeTranslation().activeSource,
-                        Target: self.activeTranslation().activeTarget
-                    }
+                    Translation: self.activeTranslation().dirty
                 })
             }, function (response) {
                 var responseData = JSON.parse(response.data);
@@ -301,39 +302,37 @@
             self.saveTranslationDialogVisible(false);
         };
 
-        self.fillTranslationSourceFromAutocomplete = function (event, ui) {
-            self.fillFromAutocomplete(
-                banksListViewModel.sourceOptionsRaw,
-                self.activeTranslation().activeSource,
-                ui.item.value);
+        self.fillDialogTranslationSource = function (event, ui) {
+            for (index in banksListViewModel.sourceOptionsRaw) {
+                if (banksListViewModel.sourceOptionsRaw[index].Spelling == ui.item.value) {
+                    var data = banksListViewModel.sourceOptionsRaw[index];
+                    self.activeTranslation().dirty.Source = new WordModel(data);
+                    self.activeTranslation().dialog.sourceSpelling(data.Spelling);
+                    self.activeTranslation().dialog.sourceTranscription(data.Transcription);
+                    break;
+                }
+            }
         };
 
-        self.fillTranslationTargetFromAutocomplete = function (event, ui) {
-            self.fillFromAutocomplete(
-                banksListViewModel.targetOptionsRaw,
-                self.activeTranslation().activeTarget,
-                ui.item.value);
-        };
-
-        self.fillFromAutocomplete = function (source, target, selected) {
-            for (index in source) {
-                if (source[index].Spelling == selected) {
-                    target(new WordModel(source[index]));
+        self.fillDialogTranslationTarget = function (event, ui) {
+            for (index in banksListViewModel.targetOptionsRaw) {
+                if (banksListViewModel.targetOptionsRaw[index].Spelling == ui.item.value) {
+                    var data = banksListViewModel.targetOptionsRaw[index];
+                    self.activeTranslation().dirty.Target = new WordModel(data);
+                    self.activeTranslation().dialog.targetSpelling(data.Spelling);
+                    self.activeTranslation().dialog.targetTranscription(data.Transcription);
                     break;
                 }
             }
         };
 
         self.commitSelections = function () {
-            self.activeTranslation().originalSource = self.activeTranslation().activeSource();
-            self.activeTranslation().originalTarget = self.activeTranslation().activeTarget();
+            self.activeTranslation().original = $.extend({}, self.activeTranslation().dirty);
         };
 
         self.rollbackSelections = function () {
-            self.activeTranslation().activeSource(self.activeTranslation().originalSource);
-            self.activeTranslation().activeTarget(self.activeTranslation().originalTarget);
-            banksListViewModel.sourceSearchString("");
-            banksListViewModel.targetSearchString("");
+            self.activeTranslation().dirty = $.extend({}, self.activeTranslation().original);
+            banksListViewModel.resetSearchStrings();
         };
 
         // Delete translation confirmation dialog
@@ -346,7 +345,7 @@
 
         self.confirmTranslationDelete = function () {
             var xhr = new easyXDM.Rpc({
-                remote: banksListViewModel.vocabServiceHost
+                remote: vx.BuildServiceHostUrl()
             }, {
                 remote: {
                     request: {}
@@ -383,7 +382,7 @@
                 Description: self.bankDescription
             };
             var xhr = new easyXDM.Rpc({
-                remote: banksListViewModel.vocabServiceHost
+                remote: vx.BuildServiceHostUrl()
             }, {
                 remote: {
                     request: {}
@@ -414,24 +413,32 @@
         };
     }
 
-    function translationModel(translationData, detailsViewModel) {
+    function translationItemModel(translationData, detailsViewModel) {
         var self = this;
         self.parent = detailsViewModel;
 
-        if (translationData) {
-            self.Id = translationData.Id;
-            self.originalSource = new WordModel(translationData.Source);
-            self.originalTarget = new WordModel(translationData.Target);
-        } else {
-            self.Id = -1;
-            self.originalSource = new WordModel(null);
-            self.originalTarget = new WordModel(null);
-        }
+        self.original = new TranslationModel(translationData);
+        self.dirty = new TranslationModel(translationData);
 
-        self.activeSource = ko.observable(self.originalSource);
-        self.activeTarget = ko.observable(self.originalTarget);
+        self.list = {
+            sourceSpelling: ko.observable(self.original.Source.Spelling),
+            sourceTranscription: ko.observable(self.original.Source.Transcription),
+            targetSpelling: ko.observable(self.original.Target.Spelling),
+            targetTranscription: ko.observable(self.original.Target.Transcription)
+        };
+
+        self.dialog = {
+            sourceSpelling: ko.observable(self.original.Source.Spelling),
+            sourceTranscription: ko.observable(self.original.Source.Transcription),
+            targetSpelling: ko.observable(self.original.Target.Spelling),
+            targetTranscription: ko.observable(self.original.Target.Transcription)
+        };
 
         self.openEditDialog = function () {
+            self.dialog.sourceSpelling(self.original.Source.Spelling);
+            self.dialog.sourceTranscription(self.original.Source.Transcription);
+            self.dialog.targetSpelling(self.original.Target.Spelling);
+            self.dialog.targetTranscription(self.original.Target.Transcription);
             self.parent.editTranslation(self);
         };
 
