@@ -8,7 +8,7 @@ vx.getWords = "GetWords";
 vx.saveWord = "SaveWord";
 vx.validateWord = "ValidateWord";
 vx.updateBankSummary = "UpdateBankSummary";
-vx.createVocabBank = "CreateVocabBank";
+vx.createVocabBank = "CreateVocabularyBank";
 vx.deleteVocabBank = "DeleteVocabularyBank";
 vx.getLanguages = "GetLanguages";
 
@@ -50,7 +50,7 @@ vx.BuildUpdateBankSummaryUrl = function() {
 };
 
 vx.BuildCreateVocabBankUrl = function() {
-    return vx.restBase + '/' + vx.createVocabBank;
+    return vx.restBase + vx.createVocabBank;
 };
 
 vx.BuildDeleteVocabularyBankUrl = function(vocabBankId) {

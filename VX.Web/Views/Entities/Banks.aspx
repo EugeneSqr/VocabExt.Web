@@ -210,7 +210,7 @@
                 success: function (response) {
                     if (response.Status) {
                         self.vocabularies.remove(function (item) {
-                            return item.id == response.StatusMessage;
+                            return item.id == self.activeBank().id;
                         });
                         if (self.vocabularies().length > 0) {
                             self.displayDetails(self.vocabularies()[0]);
@@ -262,7 +262,6 @@
         };
 
         self.submitEditDialog = function () {
-            console.log(self.activeTranslation().dirty);
             var xhr = new easyXDM.Rpc({
                 remote: vx.BuildServiceHostUrl()
             }, {
@@ -281,13 +280,14 @@
             }, function (response) {
                 var responseData = JSON.parse(response.data);
                 if (responseData.Status) {
-                    if (responseData.OperationActionCode == 0) {
+                    if (responseData.OperationActionCode == 3) {
                         self.commitSelections();
                     }
-                    if (responseData.OperationActionCode == 1) {
+                    else if (responseData.OperationActionCode == 1) {
+                        self.activeTranslation().list.sourceSpelling(self.activeTranslation().dialog.sourceSpelling());
+                        self.activeTranslation().list.targetSpelling(self.activeTranslation().dialog.targetSpelling());
                         self.translations.push(self.activeTranslation());
                     }
-
                 } else {
                     self.rollbackSelections();
                     console.log("update failed, reason: " + responseData.ErrorMessage);
@@ -327,6 +327,8 @@
         };
 
         self.commitSelections = function () {
+            self.activeTranslation().list.sourceSpelling(self.activeTranslation().dirty.Source.Spelling);
+            self.activeTranslation().list.targetSpelling(self.activeTranslation().dirty.Target.Spelling);
             self.activeTranslation().original = $.extend({}, self.activeTranslation().dirty);
         };
 
@@ -351,22 +353,21 @@
                     request: {}
                 }
             });
-
             xhr.request({
                 url: vx.BuildDetachTranslationUrl(),
                 method: "POST",
                 data: JSON.stringify({
-                    parent: self.id,
-                    child: self.activeTranslation().Id
+                    ParentId: self.id,
+                    ChildId: self.activeTranslation().original.Id
                 })
             },
-                function (response) {
-                    if (JSON.parse(response.data).Status) {
-                        self.translations.remove(function (item) {
-                            return item.Id == self.activeTranslation().Id;
-                        });
-                    }
-                });
+            function (response) {
+                if (JSON.parse(response.data).Status) {
+                    self.translations.remove(function (item) {
+                        return item.original.Id == self.activeTranslation().original.Id;
+                    });
+                }
+            });
 
             self.deleteConfirmationDialogVisible(false);
         };
@@ -393,7 +394,7 @@
                 url: vx.BuildUpdateBankSummaryUrl(),
                 method: "POST",
                 data: ko.toJSON({
-                    VocabBankId: self.id,
+                    Id: self.id,
                     Name: self.bankName,
                     Description: self.bankDescription
                 })

@@ -13,7 +13,6 @@ namespace VX.Web.Controllers
         {
             MembershipService = membershipService;
             SettingsReader = settingsReader;
-            ViewData["test"] = "test";
         }
 
         protected static string Serialize(object objectToSerialize)
