@@ -9,206 +9,924 @@
 //------------------------------------------------------------------------------
 
 namespace VX.Web.VocabExtServiceReference {
+    using System.Runtime.Serialization;
+    using System;
     
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ServiceOperationResponse", Namespace="http://schemas.datacontract.org/2004/07/VX.Domain.Responses.Impl")]
+    [System.SerializableAttribute()]
+    public partial class ServiceOperationResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorMessageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int OperationActionCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool StatusField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string StatusMessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ErrorMessage {
+            get {
+                return this.ErrorMessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorMessageField, value) != true)) {
+                    this.ErrorMessageField = value;
+                    this.RaisePropertyChanged("ErrorMessage");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int OperationActionCode {
+            get {
+                return this.OperationActionCodeField;
+            }
+            set {
+                if ((this.OperationActionCodeField.Equals(value) != true)) {
+                    this.OperationActionCodeField = value;
+                    this.RaisePropertyChanged("OperationActionCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Status {
+            get {
+                return this.StatusField;
+            }
+            set {
+                if ((this.StatusField.Equals(value) != true)) {
+                    this.StatusField = value;
+                    this.RaisePropertyChanged("Status");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string StatusMessage {
+            get {
+                return this.StatusMessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusMessageField, value) != true)) {
+                    this.StatusMessageField = value;
+                    this.RaisePropertyChanged("StatusMessage");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VocabBankContract", Namespace="http://schemas.datacontract.org/2004/07/VX.Domain.Entities.Impl")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(int[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
+    public partial class VocabBankContract : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DescriptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object[] TagsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object[] TranslationsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Description {
+            get {
+                return this.DescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
+                    this.DescriptionField = value;
+                    this.RaisePropertyChanged("Description");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object[] Tags {
+            get {
+                return this.TagsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TagsField, value) != true)) {
+                    this.TagsField = value;
+                    this.RaisePropertyChanged("Tags");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object[] Translations {
+            get {
+                return this.TranslationsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TranslationsField, value) != true)) {
+                    this.TranslationsField = value;
+                    this.RaisePropertyChanged("Translations");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TranslationContract", Namespace="http://schemas.datacontract.org/2004/07/VX.Domain.Entities.Impl")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(int[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
+    public partial class TranslationContract : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object SourceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object TargetField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object Source {
+            get {
+                return this.SourceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SourceField, value) != true)) {
+                    this.SourceField = value;
+                    this.RaisePropertyChanged("Source");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object Target {
+            get {
+                return this.TargetField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TargetField, value) != true)) {
+                    this.TargetField = value;
+                    this.RaisePropertyChanged("Target");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WordContract", Namespace="http://schemas.datacontract.org/2004/07/VX.Domain.Entities.Impl")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(int[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
+    public partial class WordContract : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object LanguageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SpellingField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TranscriptionField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object Language {
+            get {
+                return this.LanguageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LanguageField, value) != true)) {
+                    this.LanguageField = value;
+                    this.RaisePropertyChanged("Language");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Spelling {
+            get {
+                return this.SpellingField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SpellingField, value) != true)) {
+                    this.SpellingField = value;
+                    this.RaisePropertyChanged("Spelling");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Transcription {
+            get {
+                return this.TranscriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TranscriptionField, value) != true)) {
+                    this.TranscriptionField = value;
+                    this.RaisePropertyChanged("Transcription");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LanguageContract", Namespace="http://schemas.datacontract.org/2004/07/VX.Domain.Entities.Impl")]
+    [System.SerializableAttribute()]
+    public partial class LanguageContract : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string AbbreviationField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Abbreviation {
+            get {
+                return this.AbbreviationField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AbbreviationField, value) != true)) {
+                    this.AbbreviationField = value;
+                    this.RaisePropertyChanged("Abbreviation");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TagContract", Namespace="http://schemas.datacontract.org/2004/07/VX.Domain.Entities.Impl")]
+    [System.SerializableAttribute()]
+    public partial class TagContract : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DescriptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Description {
+            get {
+                return this.DescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
+                    this.DescriptionField = value;
+                    this.RaisePropertyChanged("Description");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TaskContract", Namespace="http://schemas.datacontract.org/2004/07/VX.Domain.Entities.Impl")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(object[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(int[]))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
+    public partial class TaskContract : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object[] AnswersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object CorrectAnswerField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object QuestionField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object[] Answers {
+            get {
+                return this.AnswersField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AnswersField, value) != true)) {
+                    this.AnswersField = value;
+                    this.RaisePropertyChanged("Answers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object CorrectAnswer {
+            get {
+                return this.CorrectAnswerField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CorrectAnswerField, value) != true)) {
+                    this.CorrectAnswerField = value;
+                    this.RaisePropertyChanged("CorrectAnswer");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public object Question {
+            get {
+                return this.QuestionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.QuestionField, value) != true)) {
+                    this.QuestionField = value;
+                    this.RaisePropertyChanged("Question");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="VocabBankSummary", Namespace="http://schemas.datacontract.org/2004/07/VX.Domain.Surrogates.Impl")]
+    [System.SerializableAttribute()]
+    public partial class VocabBankSummary : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DescriptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Description {
+            get {
+                return this.DescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
+                    this.DescriptionField = value;
+                    this.RaisePropertyChanged("Description");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="VocabExtServiceReference.IVocabExtService")]
     public interface IVocabExtService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/GetTask", ReplyAction="http://tempuri.org/IVocabExtService/GetTaskResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object GetTask();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/GetTasksAllVocabBanks", ReplyAction="http://tempuri.org/IVocabExtService/GetTasksAllVocabBanksResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object[] GetTasksAllVocabBanks();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/GetTasksSpecifiedVocabBanks", ReplyAction="http://tempuri.org/IVocabExtService/GetTasksSpecifiedVocabBanksResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object[] GetTasksSpecifiedVocabBanks(int[] vocabBanksIds);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/GetVocabBanksSummary", ReplyAction="http://tempuri.org/IVocabExtService/GetVocabBanksSummaryResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object[] GetVocabBanksSummary();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/GetTranslations", ReplyAction="http://tempuri.org/IVocabExtService/GetTranslationsResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object[] GetTranslations(string vocabBankId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/GetWords", ReplyAction="http://tempuri.org/IVocabExtService/GetWordsResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object[] GetWords(string searchString);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/CreateNewVocabularyBank", ReplyAction="http://tempuri.org/IVocabExtService/CreateNewVocabularyBankResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/CreateVocabularyBank", ReplyAction="http://tempuri.org/IVocabExtService/CreateVocabularyBankResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
-        object CreateNewVocabularyBank();
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
+        object CreateVocabularyBank();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/GetLanguages", ReplyAction="http://tempuri.org/IVocabExtService/GetLanguagesResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object[] GetLanguages();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/DeleteVocabularyBank", ReplyAction="http://tempuri.org/IVocabExtService/DeleteVocabularyBankResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object DeleteVocabularyBank(string vocabBankId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/SaveTranslation", ReplyAction="http://tempuri.org/IVocabExtService/SaveTranslationResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object SaveTranslation(System.IO.Stream data);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/DetachTranslation", ReplyAction="http://tempuri.org/IVocabExtService/DetachTranslationResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object DetachTranslation(System.IO.Stream data);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/UpdateBankHeaders", ReplyAction="http://tempuri.org/IVocabExtService/UpdateBankHeadersResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/UpdateBankSummary", ReplyAction="http://tempuri.org/IVocabExtService/UpdateBankSummaryResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
-        object UpdateBankHeaders(System.IO.Stream data);
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
+        object UpdateBankSummary(System.IO.Stream data);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/SaveWord", ReplyAction="http://tempuri.org/IVocabExtService/SaveWordResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object SaveWord(System.IO.Stream data);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IVocabExtService/ValidateWord", ReplyAction="http://tempuri.org/IVocabExtService/ValidateWordResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TranslationContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.WordContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.LanguageContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TagContract))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.TaskContract))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(int[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Surrogates.Impl.VocabBankSummary))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(byte[]))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TranslationContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.WordContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.LanguageContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.VocabBankContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TagContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Entities.Impl.TaskContract))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Domain.Responses.Impl.ServiceOperationResponse))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(VX.Web.VocabExtServiceReference.VocabBankSummary))]
         object ValidateWord(System.IO.Stream data);
     }
     
@@ -263,8 +981,8 @@ namespace VX.Web.VocabExtServiceReference {
             return base.Channel.GetWords(searchString);
         }
         
-        public object CreateNewVocabularyBank() {
-            return base.Channel.CreateNewVocabularyBank();
+        public object CreateVocabularyBank() {
+            return base.Channel.CreateVocabularyBank();
         }
         
         public object[] GetLanguages() {
@@ -283,8 +1001,8 @@ namespace VX.Web.VocabExtServiceReference {
             return base.Channel.DetachTranslation(data);
         }
         
-        public object UpdateBankHeaders(System.IO.Stream data) {
-            return base.Channel.UpdateBankHeaders(data);
+        public object UpdateBankSummary(System.IO.Stream data) {
+            return base.Channel.UpdateBankSummary(data);
         }
         
         public object SaveWord(System.IO.Stream data) {

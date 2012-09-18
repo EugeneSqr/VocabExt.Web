@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:17025/VocabExtService.svc?xsd=xsd4" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost:17025/VocabExtService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="http://localhost:17025/VocabExtService.svc?xsd=xsd6" namespace="http://schemas.microsoft.com/Message" />
   <xs:element name="GetTask">
     <xs:complexType>
@@ -80,15 +80,15 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CreateNewVocabularyBank">
+  <xs:element name="CreateVocabularyBank">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="CreateNewVocabularyBankResponse">
+  <xs:element name="CreateVocabularyBankResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="CreateNewVocabularyBankResult" nillable="true" type="xs:anyType" />
+        <xs:element minOccurs="0" name="CreateVocabularyBankResult" nillable="true" type="xs:anyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -146,17 +146,17 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UpdateBankHeaders">
+  <xs:element name="UpdateBankSummary">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q10="http://schemas.microsoft.com/Message" name="data" type="q10:StreamBody" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UpdateBankHeadersResponse">
+  <xs:element name="UpdateBankSummaryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="UpdateBankHeadersResult" nillable="true" type="xs:anyType" />
+        <xs:element minOccurs="0" name="UpdateBankSummaryResult" nillable="true" type="xs:anyType" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
