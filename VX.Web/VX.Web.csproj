@@ -70,10 +70,6 @@
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
-    <Reference Include="VX.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\.Libraries\VX.Domain.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
@@ -93,7 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AccountMembershipService.svc" />
-    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\css\site.css" />
     <Content Include="Content\Images\boxbg.jpg" />
     <Content Include="Content\Images\clock.gif" />
