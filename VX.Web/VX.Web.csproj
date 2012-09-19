@@ -47,6 +47,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.Mvc3.2.6.3.862\lib\NET40\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -90,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AccountMembershipService.svc" />
+    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\css\site.css" />
     <Content Include="Content\Images\boxbg.jpg" />
     <Content Include="Content\Images\clock.gif" />
