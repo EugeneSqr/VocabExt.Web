@@ -1,6 +1,7 @@
 packages/
 VX.Web/Web.Release.config
 VX.Web/Web.Release.Test.config
+VX.Web/Web.Release.Prod.config
 VX.Web/bin/
 VX.Web/obj/
 VX.Web.Infrastructure/bin/
